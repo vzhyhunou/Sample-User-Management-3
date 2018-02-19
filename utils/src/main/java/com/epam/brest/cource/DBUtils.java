@@ -19,7 +19,7 @@ public class DBUtils {
         System.out.println("Create app_user table.");
         String createTable =
                 "CREATE TABLE app_user (" +
-                        "user_id INT NOT NULL AUTO_INCREMENT," +
+                        "user_id INT NULL," +
                         "login VARCHAR(255) NOT NULL," +
                         "password VARCHAR(255) NOT NULL," +
                         "description VARCHAR(255) NULL," +
@@ -33,11 +33,11 @@ public class DBUtils {
 
         System.out.println(String.format("Add user: %s", login));
 
-        String newUser = "INSERT INTO app_user (login, password, description) VALUES (?, ?, ?)";
+        String newUser = "INSERT INTO app_user (password, description) VALUES (?, ?)";
         PreparedStatement preparedStatement = connection.prepareStatement(newUser);
-        preparedStatement.setString(1, login);
-        preparedStatement.setString(2, password);
-        preparedStatement.setString(3, description);
+        //preparedStatement.setString(1, login);
+        preparedStatement.setString(1, password);
+        preparedStatement.setString(2, description);
         preparedStatement.executeUpdate();
 
     }
