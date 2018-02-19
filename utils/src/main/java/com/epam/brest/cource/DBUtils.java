@@ -2,8 +2,18 @@ package com.epam.brest.cource;
 
 import java.sql.*;
 
+/**
+ * DBUtils class for implementation JDBC operations.
+ */
 public class DBUtils {
 
+    /**
+     * Get connection to DB.
+     *
+     * @return Connection
+     * @throws ClassNotFoundException
+     * @throws SQLException
+     */
     public Connection getConnection() throws ClassNotFoundException, SQLException {
 
         System.out.println("Connect to DB.");
@@ -14,6 +24,12 @@ public class DBUtils {
         return connection;
     }
 
+    /**
+     * Create app_user table in DB.
+     *
+     * @param connection
+     * @throws SQLException
+     */
     public void createUserTable(Connection connection) throws SQLException {
 
         System.out.println("Create app_user table.");
