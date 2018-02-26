@@ -1,4 +1,4 @@
-package com.epam.brest.cource;
+package com.epam.brest.cource.model;
 
 import org.junit.Assert;
 import org.junit.Test;
