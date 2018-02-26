@@ -8,13 +8,11 @@
     <version>1.0-SNAPSHOT</version>
 
     <packaging>pom</packaging>
-
     <name>sampleuserapp</name>
     <url>http://maven.apache.org</url>
 
     <modules>
-        <module>utils</module>
-        <module>main-app</module>
+        <module>model</module>
     </modules>
 
     <distributionManagement>
@@ -31,11 +29,6 @@
 
     <dependencyManagement>
         <dependencies>
-            <dependency>
-                <groupId>com.epam.brest.cource</groupId>
-                <artifactId>utils</artifactId>
-                <version>${project.version}</version>
-            </dependency>
             <dependency>
                 <groupId>com.h2database</groupId>
                 <artifactId>h2</artifactId>
