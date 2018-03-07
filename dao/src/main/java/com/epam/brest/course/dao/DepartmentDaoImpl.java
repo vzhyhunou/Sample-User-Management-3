@@ -1,6 +1,8 @@
 package com.epam.brest.course.dao;
 
 import com.epam.brest.course.model.Department;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.RowMapper;
@@ -16,6 +18,8 @@ import java.sql.SQLException;
 import java.util.List;
 
 public class DepartmentDaoImpl implements DepartmentDao {
+
+    private static final Logger LOGGER = LogManager.getLogger();
 
     public static final String DEPARTMENT_ID = "departmentId";
     public static final String DEPARTMENT_NAME = "departmentName";
@@ -47,6 +51,7 @@ public class DepartmentDaoImpl implements DepartmentDao {
 
     @Override
     public List<Department> getDepartments() {
+        LOGGER.debug("getDepartments()");
         List<Department> departments =
                 namedParameterJdbcTemplate.getJdbcOperations().query(select, new DepartmentRowMapper());
         return departments;
@@ -64,6 +69,7 @@ public class DepartmentDaoImpl implements DepartmentDao {
 
     @Override
     public Department getDepartmentById(Integer departmentId) {
+        LOGGER.debug("getDepartmentById({})", departmentId);
         SqlParameterSource namedParameters =
                 new MapSqlParameterSource(DEPARTMENT_ID, departmentId);
         Department department = namedParameterJdbcTemplate.queryForObject(selectById, namedParameters,
@@ -73,12 +79,13 @@ public class DepartmentDaoImpl implements DepartmentDao {
 
     @Override
     public Department addDepartment(Department department) {
-
+        LOGGER.debug("addDepartment({})", department);
         MapSqlParameterSource namedParameters =
                 new MapSqlParameterSource("departmentName", department.getDepartmentName());
         Integer result =
                 namedParameterJdbcTemplate.queryForObject(checkDepartment, namedParameters, Integer.class);
 
+        LOGGER.debug("result({})", result);
         if (result == 0) {
             namedParameters = new MapSqlParameterSource();
             namedParameters.addValue("departmentName", department.getDepartmentName());
