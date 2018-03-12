@@ -21,3 +21,6 @@
       
         check: ``<project>/target/stage/index.html``
 
+
+4. Travis CI integration
+    https://travis-ci.org/Brest-Java-Course-2018/Sample-User-Management/
