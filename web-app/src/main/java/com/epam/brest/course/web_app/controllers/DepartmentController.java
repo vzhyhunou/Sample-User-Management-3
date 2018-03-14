@@ -1,7 +1,6 @@
 package com.epam.brest.course.web_app.controllers;
 
 import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 
 /**
@@ -10,13 +9,23 @@ import org.springframework.web.bind.annotation.GetMapping;
 @Controller
 public class DepartmentController {
 
+    /**
+     * Goto departments page.
+     *
+     * @return view name
+     */
     @GetMapping(value = "/departments")
-    public String departments(Model model) {
+    public final String departments() {
         return "departments";
     }
 
+    /**
+     * Goto department page.
+     *
+     * @return view name
+     */
     @GetMapping(value = "/department")
-    public String department(Model model) {
+    public final String department() {
         return "department";
     }
 }
