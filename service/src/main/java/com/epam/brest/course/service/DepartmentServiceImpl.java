@@ -5,6 +5,8 @@ import com.epam.brest.course.model.Department;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
+import java.util.Collection;
+
 public class DepartmentServiceImpl implements DepartmentService {
 
     private static final Logger LOGGER = LogManager.getLogger();
@@ -27,5 +29,11 @@ public class DepartmentServiceImpl implements DepartmentService {
         Department department = departmentDao.getDepartmentById(departmentId);
         department.setDescription(description);
         departmentDao.updateDepartment(department);
+    }
+
+    @Override
+    public Collection<Department> getDepartments() {
+        LOGGER.debug("getDepartments()");
+        return departmentDao.getDepartments();
     }
 }

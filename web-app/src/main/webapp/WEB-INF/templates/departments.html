@@ -28,10 +28,10 @@
         <ul class="navbar-nav">
             <a class="nav-item nav-link active"
                href="departments.html"
-               th:href="departments">Departments</a>
+               th:href="@{/departments}">Departments</a>
             <a class="nav-item nav-link"
                href="employees.html"
-               th:href="employees">Employees</a>
+               th:href="@{/employees}">Employees</a>
         </ul>
     </div>
 </nav>
@@ -59,7 +59,7 @@
     <div class="container-fluid">
         <div class="row">
             <div class="col">
-                <div class="card">
+                <div class="card" th:if="not ${departments.isEmpty()}">
                     <table class="table table-striped">
                         <thead class="thead-inverse">
                         <tr>
@@ -69,11 +69,11 @@
                         </tr>
                         </thead>
                         <tbody>
-                        <tr>
-                            <td>CEO</td>
+                        <tr th:each="department : ${departments}">
+                            <td th:text="${department.departmentName}">CEO</td>
                             <td>10000</td>
                             <td class="text-right">
-                                <a href="department.html"
+                                <a href="department.html" th:href="'/department/' + ${department.departmentId}"
                                    class="btn-sm btn-outline-secondary"
                                    title="Edit department"
                                    data-toggle="tooltip"
@@ -89,11 +89,11 @@
                                 </span>
                             </td>
                         </tr>
-                        <tr>
+                        <tr th:remove="all">
                             <td>&nbsp;&nbsp;&nbsp;&nbsp;Accounting</td>
                             <td>2500</td>
                             <td class="text-right">
-                                <a href="department.html"
+                                <a href="department.html" th:href="@{/department/2}"
                                    class="btn-sm btn-outline-secondary"
                                    title="Edit department"
                                    data-toggle="tooltip"
@@ -109,7 +109,7 @@
                                 </span>
                             </td>
                         </tr>
-                        <tr>
+                        <tr th:remove="all">
                             <td>&nbsp;&nbsp;&nbsp;&nbsp;Development</td>
                             <td>1150</td>
                             <td class="text-right">
@@ -129,7 +129,7 @@
                                 </span>
                             </td>
                         </tr>
-                        <tr>
+                        <tr th:remove="all">
                             <td>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Java</td>
                             <td>1500</td>
                             <td class="text-right">
@@ -149,7 +149,7 @@
                                 </span>
                             </td>
                         </tr>
-                        <tr>
+                        <tr th:remove="all">
                             <td>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Testing</td>
                             <td>1100</td>
                             <td class="text-right">
@@ -169,7 +169,7 @@
                                 </span>
                             </td>
                         </tr>
-                        <tr>
+                        <tr th:remove="all">
                             <td>&nbsp;&nbsp;&nbsp;&nbsp;People management</td>
                             <td>800</td>
                             <td class="text-right">
@@ -191,6 +191,9 @@
                         </tr>
                         </tbody>
                     </table>
+                </div>
+                <div class="card alert alert-warning" th:if="${departments.isEmpty()}">
+                    <h2>Notning found</h2>
                 </div>
             </div>
         </div>

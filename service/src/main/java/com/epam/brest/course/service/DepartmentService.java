@@ -2,10 +2,14 @@ package com.epam.brest.course.service;
 
 import com.epam.brest.course.model.Department;
 import org.springframework.dao.DataAccessException;
+import org.springframework.stereotype.Service;
+
+import java.util.Collection;
 
 /**
  * Department Service Interface.
  */
+@Service
 public interface DepartmentService {
 
     /**
@@ -25,5 +29,13 @@ public interface DepartmentService {
      * @throws DataAccessException on data access error.
      */
     void updateDepartmentDescription(Integer departmentId, String description);
+
+    /**
+     * Get departments list.
+     *
+     * @return departments list.
+     * @throws DataAccessException on data access error.
+     */
+    Collection<Department> getDepartments();
 
 }

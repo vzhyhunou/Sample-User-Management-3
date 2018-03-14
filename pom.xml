@@ -48,16 +48,15 @@
             </dependency>
             <dependency>
                 <groupId>com.epam.brest.course</groupId>
-                <artifactId>test-db</artifactId>
+                <artifactId>service</artifactId>
                 <version>${project.version}</version>
-                <scope>test</scope>
             </dependency>
             <dependency>
                 <groupId>com.epam.brest.course</groupId>
                 <artifactId>web-app</artifactId>
                 <version>${project.version}</version>
-                <scope>test</scope>
             </dependency>
+
             <dependency>
                 <groupId>org.springframework</groupId>
                 <artifactId>spring-context</artifactId>
@@ -127,6 +126,12 @@
                 <groupId>org.easymock</groupId>
                 <artifactId>easymock</artifactId>
                 <version>3.5.1</version>
+                <scope>test</scope>
+            </dependency>
+            <dependency>
+                <groupId>com.epam.brest.course</groupId>
+                <artifactId>test-db</artifactId>
+                <version>${project.version}</version>
                 <scope>test</scope>
             </dependency>
         </dependencies>
