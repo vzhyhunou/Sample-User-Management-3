@@ -1,7 +1,7 @@
 package com.epam.brest.course.dao;
 
+import com.epam.brest.course.dto.DepartmentDTO;
 import com.epam.brest.course.model.Department;
-import org.springframework.dao.DataAccessException;
 
 import java.util.List;
 
@@ -14,41 +14,43 @@ public interface DepartmentDao {
      * Get departments list.
      *
      * @return departments list.
-     * @throws DataAccessException on data access error.
      */
     List<Department> getDepartments();
+
+    /**
+     * Get department DTOs list.
+     *
+     * @return department DTOs list.
+     */
+    List<DepartmentDTO> getDepartmentDTOs();
 
     /**
      * Get Department By Id.
      *
      * @param departmentId id
      * @return Department
-     * @throws DataAccessException on data access error.
      */
     Department getDepartmentById(Integer departmentId);
 
     /**
      * Persist new department.
      *
-     * @param department new depatrment
+     * @param department new department
      * @return department with id.
-     * @throws DataAccessException on data access error.
      */
     Department addDepartment(Department department);
 
     /**
      * Update department.
      *
-     * @param department depatrment
-     * @throws DataAccessException on data access error.
+     * @param department department
      */
     void updateDepartment(Department department);
 
     /**
      * Delete department.
      *
-     * @param id depatrment id
-     * @throws DataAccessException on data access error.
+     * @param id department id
      */
     void deleteDepartmentById(Integer id);
 

@@ -1,15 +1,14 @@
 package com.epam.brest.course.service;
 
+import com.epam.brest.course.dto.DepartmentDTO;
 import com.epam.brest.course.model.Department;
 import org.springframework.dao.DataAccessException;
-import org.springframework.stereotype.Service;
 
 import java.util.Collection;
 
 /**
  * Department Service Interface.
  */
-@Service
 public interface DepartmentService {
 
     /**
@@ -22,12 +21,27 @@ public interface DepartmentService {
     Department getDepartmentById(Integer departmentId);
 
     /**
+     * Persist new department.
+     *
+     * @param department new department
+     * @return department with id.
+     */
+    Department addDepartment(Department department);
+
+    /**
+     * Update department.
+     *
+     * @param department department
+     */
+    void updateDepartment(Department department);
+
+    /**
      * Update department description.
      *
      * @param departmentId id
      * @param description new description
-     * @throws DataAccessException on data access error.
      */
+    @Deprecated
     void updateDepartmentDescription(Integer departmentId, String description);
 
     /**
@@ -38,4 +52,17 @@ public interface DepartmentService {
      */
     Collection<Department> getDepartments();
 
+    /**
+     * Get department DTOs list.
+     *
+     * @return department DTOs list.
+     */
+    Collection<DepartmentDTO> getDepartmentDTOs();
+
+    /**
+     * Delete department.
+     *
+     * @param id department id
+     */
+    void deleteDepartmentById(Integer id);
 }
