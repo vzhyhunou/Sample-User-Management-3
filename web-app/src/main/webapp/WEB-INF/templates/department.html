@@ -87,33 +87,36 @@
                                    type="hidden"
                                    th:field="*{departmentId}"/>
 
-                            <div class="form-group"
-                                 th:class="${#fields.hasErrors('departmentName')} ? 'form-group has-error' : 'form-group'">
+                            <div class="form-group">
                                 <label class="form-control-label"
                                        for="field_departmentName">Department Name</label>
-                                <input class="form-control "
+                                <input class="form-control"
+                                       th:class="${#fields.hasErrors('departmentName')} ? 'form-control is-invalid' : 'form-control'"
                                        id="field_departmentName"
                                        name="field_departmentName"
                                        type="text"
                                        value="CEO"
                                        th:field="*{departmentName}"/>
-                                <div class="form-text text-danger"
-                                      th:if="${#fields.hasErrors('departmentName')}"
-                                      th:errors="*{departmentName}">[errors]</div>
+                                <div th:if="${#fields.hasErrors('departmentName')}"
+                                     class="invalid-feedback"
+                                     th:errors="*{departmentName}">[errors]
+                                </div>
                             </div>
 
                             <div class="form-group">
                                 <label class="form-control-label"
                                        for="field_description">Description</label>
                                 <input class="form-control"
+                                       th:class="${#fields.hasErrors('description')} ? 'form-control is-invalid' : 'form-control'"
                                        id="field_description"
                                        name="field_description"
                                        type="text"
                                        value="CEO department"
                                        th:field="*{description}"/>
-                                <div class="form-text text-danger"
-                                     th:if="${#fields.hasErrors('description')}"
-                                     th:errors="*{description}">[errors]</div>
+                                <div th:if="${#fields.hasErrors('description')}"
+                                     class="invalid-feedback"
+                                     th:errors="*{description}">[errors]
+                                </div>
                             </div>
                         </form>
                     </div>
