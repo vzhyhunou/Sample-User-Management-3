@@ -38,4 +38,13 @@ public interface DepartmentService {
      */
     Collection<Department> getDepartments();
 
+    /**
+     * Persist new department.
+     *
+     * @param department new depatrment
+     * @return department with id.
+     * @throws DataAccessException on data access error.
+     */
+    Department addDepartment(Department department);
+
 }

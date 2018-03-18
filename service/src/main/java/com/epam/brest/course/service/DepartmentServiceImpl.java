@@ -36,4 +36,10 @@ public class DepartmentServiceImpl implements DepartmentService {
         LOGGER.debug("getDepartments()");
         return departmentDao.getDepartments();
     }
+
+    @Override
+    public Department addDepartment(Department department) {
+        LOGGER.debug("addDepartment({})", department);
+        return departmentDao.addDepartment(department);
+    }
 }

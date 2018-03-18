@@ -34,4 +34,12 @@ public class DepartmentRestController {
         LOGGER.debug("getUser: login = {}", id);
         return departmentService.getDepartmentById(id);
     }
+
+    //curl -H "Content-Type: application/json" -X POST -d '{"departmentName":"xyz","description":"xyz"}' -v localhost:8080/departments
+    @RequestMapping(value = "/departments", method = RequestMethod.POST)
+    @ResponseStatus(HttpStatus.CREATED)
+    public @ResponseBody Department addDepartment(@RequestBody Department department) {
+        LOGGER.debug("addDepartment: department = {}", department);
+        return departmentService.addDepartment(department);
+    }
 }
