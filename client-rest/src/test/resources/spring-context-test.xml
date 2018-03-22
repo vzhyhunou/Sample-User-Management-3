@@ -8,23 +8,19 @@
     <bean id="placeholderConfigurer" class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
         <property name="locations">
             <list>
-                <value>classpath*:console-app.properties</value>
+                <value>classpath:rest.properties</value>
             </list>
         </property>
     </bean>
 
-
     <context:annotation-config/>
     <context:component-scan base-package="com.epam.brest.course.client"/>
 
-    <bean id="customResponseErrorHandler" class="com.epam.brest.course.client.rest.CustomResponseErrorHandler"/>
-
     <bean id="restTemplate" class="org.easymock.EasyMock" factory-method="createMock">
         <constructor-arg value="org.springframework.web.client.RestTemplate"/>
-        <property name="errorHandler" ref="customResponseErrorHandler"/>
     </bean>
 
-    <bean id="departmentConsumer" class="com.epam.brest.course.client.rest.DepartmentConsumerRest">
+    <bean id="departmentService" class="com.epam.brest.course.client.rest.DepartmentConsumerRest">
         <constructor-arg index="0" type="java.lang.String" value="${protocol}://${host}:${port}/${point.departments}"/>
         <property name="restTemplate" ref="restTemplate"/>
     </bean>

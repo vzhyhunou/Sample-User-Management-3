@@ -1,5 +1,6 @@
 package com.epam.brest.course.rest;
 
+import com.epam.brest.course.dto.DepartmentDTO;
 import com.epam.brest.course.model.Department;
 import com.epam.brest.course.service.DepartmentService;
 import org.apache.logging.log4j.LogManager;
@@ -21,9 +22,9 @@ public class DepartmentRestController {
     //curl -v localhost:8080/departments
     @RequestMapping(value = "/departments", method = RequestMethod.GET)
     public @ResponseBody
-    Collection<Department> departments() {
+    Collection<DepartmentDTO> departments() {
         LOGGER.debug("departments()");
-        return departmentService.getDepartments();
+        return departmentService.getDepartmentDTOs();
     }
 
     //curl -v localhost:8080/departments/1

@@ -1,31 +1,33 @@
 package com.epam.brest.course.client;
 
-import com.epam.brest.course.client.rest.DepartmentConsumer;
+import com.epam.brest.course.dto.DepartmentDTO;
 import com.epam.brest.course.model.Department;
-import org.springframework.beans.factory.annotation.Autowired;
+import com.epam.brest.course.service.DepartmentService;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
-import org.springframework.stereotype.Component;
 
-import java.util.List;
+import java.util.Collection;
 import java.util.Scanner;
 
 /**
  * REST client console application demo.
  */
-@Component
 public class DemoApp {
 
-    @Autowired
-    DepartmentConsumer departmentConsumer;
+    private DepartmentService departmentService;
 
-    Scanner sc = new Scanner(System.in);
+    private Scanner sc = new Scanner(System.in);
 
     public static void main(String[] args) {
 
         ClassPathXmlApplicationContext ctx = new ClassPathXmlApplicationContext("spring-context.xml");
+        DepartmentService departmentService = ctx.getBean(DepartmentService.class);
 
-        DemoApp demoApp = ctx.getBean(DemoApp.class);
+        DemoApp demoApp = new DemoApp(departmentService);
         demoApp.menu();
+    }
+
+    public DemoApp(DepartmentService departmentService) {
+        this.departmentService = departmentService;
     }
 
     private void menu() {
@@ -38,9 +40,10 @@ public class DemoApp {
         System.out.println("| Options:                      |");
         System.out.println("|        1. Get all departments |");
         System.out.println("|        2. Get department by id|");
-        System.out.println("|        3. Exit                |");
+        System.out.println("|        3. Add department      |");
+        System.out.println("|        4. Exit                |");
         System.out.println("=================================");
-        while (swValue != 3) {
+        while (swValue != 4) {
             System.out.print("Select option: ");
             if (sc.hasNextInt()) {
                 swValue = sc.nextInt();
@@ -60,6 +63,9 @@ public class DemoApp {
                 getDepartmentById();
                 break;
             case 3:
+                addDepartment();
+                break;
+            case 4:
                 System.out.println("Exit.");
                 break;
             default:
@@ -69,19 +75,39 @@ public class DemoApp {
     }
 
     private void getAllDepartments() {
-        List<Department> departments = departmentConsumer.getAllDepartments();
+        Collection<DepartmentDTO> departments = departmentService.getDepartmentDTOs();
         System.out.println("departments: " + departments);
     }
 
     private void getDepartmentById() {
-        String id = "";
+        int id = 0;
         System.out.print("    Enter department id: ");
         if (sc.hasNextLine()) {
-            id = sc.next();
+            id = sc.nextInt();
         }
 
         try {
-            Department department = departmentConsumer.getDepartmentById(Integer.valueOf(id));
+            Department department = departmentService.getDepartmentById(id);
+            System.out.println("    Department: " + department);
+        } catch (ServerDataAccessException ex) {
+            System.out.println("    ERROR: " + ex.getMessage());
+        }
+    }
+
+    private void addDepartment() {
+        String name = "";
+        System.out.print("    Enter department name: ");
+        if (sc.hasNextLine()) {
+            name = sc.next();
+        }
+        String desc = "";
+        System.out.print("    Enter department desc: ");
+        if (sc.hasNextLine()) {
+            desc = sc.next();
+        }
+
+        try {
+            Department department = departmentService.addDepartment(new Department(name, desc));
             System.out.println("    Department: " + department);
         } catch (ServerDataAccessException ex) {
             System.out.println("    ERROR: " + ex.getMessage());

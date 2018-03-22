@@ -1,16 +1,19 @@
 package com.epam.brest.course.client.rest;
 
 import com.epam.brest.course.client.ServerDataAccessException;
+import com.epam.brest.course.dto.DepartmentDTO;
 import com.epam.brest.course.model.Department;
+import com.epam.brest.course.service.DepartmentService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.client.RestTemplate;
 
+import java.util.Collection;
 import java.util.List;
 
 /**
  * Department Consumer REST implementation.
  */
-public class DepartmentConsumerRest implements DepartmentConsumer {
+public class DepartmentConsumerRest implements DepartmentService {
 
     private String url;
 
@@ -25,9 +28,9 @@ public class DepartmentConsumerRest implements DepartmentConsumer {
     }
 
     @Override
-    public List<Department> getAllDepartments() throws ServerDataAccessException {
+    public List<DepartmentDTO> getDepartmentDTOs() throws ServerDataAccessException {
         ResponseEntity responseEntity = restTemplate.getForEntity(url, List.class);
-        List<Department> departments = (List<Department>) responseEntity.getBody();
+        List<DepartmentDTO> departments = (List<DepartmentDTO>) responseEntity.getBody();
         return departments;
     }
 
@@ -43,5 +46,25 @@ public class DepartmentConsumerRest implements DepartmentConsumer {
         ResponseEntity responseEntity = restTemplate.postForEntity(url, department, Department.class);
         Object result = responseEntity.getBody();
         return (Department) result;
+    }
+
+    @Override
+    public void updateDepartment(Department department) {
+
+    }
+
+    @Override
+    public void deleteDepartmentById(Integer id) {
+
+    }
+
+    @Override
+    public void updateDepartmentDescription(Integer departmentId, String description) {
+
+    }
+
+    @Override
+    public Collection<Department> getDepartments() {
+        return null;
     }
 }
