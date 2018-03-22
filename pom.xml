@@ -18,6 +18,7 @@
         <module>test-db</module>
         <module>web-app</module>
         <module>rest-app</module>
+        <module>client-rest</module>
     </modules>
 
     <distributionManagement>
@@ -330,7 +331,7 @@
                 </configuration>
             </plugin>
 
-            <plugin>
+            <!--<plugin>
                 <groupId>org.codehaus.mojo</groupId>
                 <artifactId>cobertura-maven-plugin</artifactId>
                 <dependencies>
@@ -359,7 +360,7 @@
                         </goals>
                     </execution>
                 </executions>
-            </plugin>
+            </plugin>-->
 
             <plugin>
                 <groupId>org.codehaus.mojo</groupId>

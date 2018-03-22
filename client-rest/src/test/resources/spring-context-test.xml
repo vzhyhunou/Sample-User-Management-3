@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xmlns="http://www.springframework.org/schema/beans"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+       http://www.springframework.org/schema/beans/spring-beans.xsd http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd">
+
+    <bean id="placeholderConfigurer" class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
+        <property name="locations">
+            <list>
+                <value>classpath*:console-app.properties</value>
+            </list>
+        </property>
+    </bean>
+
+
+    <context:annotation-config/>
+    <context:component-scan base-package="com.epam.brest.course.client"/>
+
+    <bean id="customResponseErrorHandler" class="com.epam.brest.course.client.rest.CustomResponseErrorHandler"/>
+
+    <bean id="restTemplate" class="org.easymock.EasyMock" factory-method="createMock">
+        <constructor-arg value="org.springframework.web.client.RestTemplate"/>
+        <property name="errorHandler" ref="customResponseErrorHandler"/>
+    </bean>
+
+    <bean id="departmentConsumer" class="com.epam.brest.course.client.rest.DepartmentConsumerRest">
+        <constructor-arg index="0" type="java.lang.String" value="${protocol}://${host}:${port}/${point.departments}"/>
+        <property name="restTemplate" ref="restTemplate"/>
+    </bean>
+
+</beans>
