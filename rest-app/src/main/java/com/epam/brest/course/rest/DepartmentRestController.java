@@ -1,5 +1,6 @@
 package com.epam.brest.course.rest;
 
+import com.epam.brest.course.dto.DepartmentDTO;
 import com.epam.brest.course.model.Department;
 import com.epam.brest.course.service.DepartmentService;
 import org.apache.logging.log4j.LogManager;
@@ -18,12 +19,14 @@ public class DepartmentRestController {
     @Autowired
     private DepartmentService departmentService;
 
+    //curl -v localhost:8080/departments
     @GetMapping(value = "/departments")
-    Collection<Department> departments() {
+    Collection<DepartmentDTO> departments() {
         LOGGER.debug("departments()");
-        return departmentService.getDepartments();
+        return departmentService.getDepartmentDTOs();
     }
 
+    //curl -v localhost:8080/departments/1
     @GetMapping(value = "/departments/{id}")
     @ResponseStatus(HttpStatus.FOUND)
     Department departmentById(@PathVariable(value = "id") Integer id) {
@@ -31,6 +34,7 @@ public class DepartmentRestController {
         return departmentService.getDepartmentById(id);
     }
 
+    //curl -H "Content-Type: application/json" -X POST -d '{"departmentName":"xyz","description":"xyz"}' -v localhost:8080/departments
     @PostMapping(value = "/departments")
     @ResponseStatus(HttpStatus.CREATED)
     Department addDepartment(@RequestBody Department department) {
