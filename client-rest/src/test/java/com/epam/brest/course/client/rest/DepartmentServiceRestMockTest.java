@@ -4,29 +4,25 @@ import com.epam.brest.course.dto.DepartmentDTO;
 import com.epam.brest.course.model.Department;
 import com.epam.brest.course.service.DepartmentService;
 import org.junit.After;
+import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.web.client.RestTemplate;
 
-import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
 
 import static org.easymock.EasyMock.*;
-import static org.junit.Assert.assertEquals;
 
-/**
- * DepartmentConsumerRest Test
- */
 @RunWith(SpringJUnit4ClassRunner.class)
-@ContextConfiguration(locations = {"classpath:spring-context-test.xml"})
+@ContextConfiguration(locations = "classpath:spring-context-test.xml")
 public class DepartmentServiceRestMockTest {
 
     private static DepartmentDTO departmentDTO1;
@@ -35,9 +31,6 @@ public class DepartmentServiceRestMockTest {
 
     @Autowired
     DepartmentService departmentService;
-
-    @Value("${protocol}://${host}:${port}/${point.departments}")
-    private String url;
 
     @Autowired
     private RestTemplate mockRestTemplate;
@@ -56,32 +49,44 @@ public class DepartmentServiceRestMockTest {
 
     @After
     public void tearDown() {
+        verify(mockRestTemplate);
         reset(mockRestTemplate);
     }
 
     @Test
     public void getAllDepartments() {
-
-        List<DepartmentDTO> expectedResult = new ArrayList<>(2);
-        expectedResult.add(departmentDTO1);
-        expectedResult.add(departmentDTO2);
-        expect(mockRestTemplate.getForEntity(url, List.class))
-                .andReturn(new ResponseEntity<>(expectedResult, HttpStatus.OK));
+        List departments = Arrays.asList(departmentDTO1, departmentDTO2);
+        ResponseEntity entity = new ResponseEntity<>(departments, HttpStatus.OK);
+        expect(mockRestTemplate.getForEntity(anyString(), anyObject())).andReturn(entity);
         replay(mockRestTemplate);
 
-        Collection<DepartmentDTO> departments = departmentService.getDepartmentDTOs();
-        assertEquals(2, departments.size());
+        Collection<DepartmentDTO> results = departmentService.getDepartmentDTOs();
+
+        Assert.assertNotNull(results);
+        Assert.assertEquals(2, results.size());
     }
 
     @Test
     public void getDepartmentById() {
-
-        expect(mockRestTemplate.getForEntity(url + "/3", Department.class))
-                .andReturn(new ResponseEntity<>(department, HttpStatus.FOUND));
+        ResponseEntity entity = new ResponseEntity<>(department, HttpStatus.OK);
+        expect(mockRestTemplate.getForEntity(anyString(), anyObject())).andReturn(entity);
         replay(mockRestTemplate);
 
         Department result = departmentService.getDepartmentById(3);
-        assertEquals(3, result.getDepartmentId().intValue());
+
+        Assert.assertNotNull(result);
+        Assert.assertEquals("name", result.getDepartmentName());
     }
 
+    @Test
+    public void addDepartment() {
+        ResponseEntity entity = new ResponseEntity<>(department, HttpStatus.OK);
+        expect(mockRestTemplate.postForEntity(anyString(), anyObject(), anyObject())).andReturn(entity);
+        replay(mockRestTemplate);
+
+        Department result = departmentService.addDepartment(department);
+
+        Assert.assertNotNull(result);
+        Assert.assertEquals(3, result.getDepartmentId().intValue());
+    }
 }

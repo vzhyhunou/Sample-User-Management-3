@@ -3,7 +3,10 @@
        xmlns:context="http://www.springframework.org/schema/context"
        xmlns="http://www.springframework.org/schema/beans"
        xsi:schemaLocation="http://www.springframework.org/schema/beans
-       http://www.springframework.org/schema/beans/spring-beans.xsd http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd">
+       http://www.springframework.org/schema/beans/spring-beans.xsd
+       http://www.springframework.org/schema/context
+       http://www.springframework.org/schema/context/spring-context.xsd">
+
 
     <bean id="placeholderConfigurer" class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
         <property name="locations">
@@ -21,8 +24,8 @@
     </bean>
 
     <bean id="departmentService" class="com.epam.brest.course.client.rest.DepartmentConsumerRest">
-        <constructor-arg index="0" type="java.lang.String" value="${protocol}://${host}:${port}/${point.departments}"/>
-        <property name="restTemplate" ref="restTemplate"/>
+        <constructor-arg index="0" value="${protocol}://${host}:${port}/${point.departments}"/>
+        <constructor-arg index="1" ref="restTemplate"/>
     </bean>
 
 </beans>

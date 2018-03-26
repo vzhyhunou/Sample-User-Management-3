@@ -12,6 +12,7 @@ import org.springframework.http.converter.json.MappingJackson2HttpMessageConvert
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 
 import java.util.Arrays;
 
@@ -19,8 +20,9 @@ import static org.easymock.EasyMock.*;
 import static org.hamcrest.Matchers.is;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
-import static org.springframework.test.web.servlet.setup.MockMvcBuilders.standaloneSetup;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(locations = {"classpath:rest-spring-test.xml"})
@@ -45,7 +47,7 @@ public class DepartmentControllerMockTest {
         departmentDTO2 = new DepartmentDTO();
         departmentDTO2.setDepartmentId(2);
         departmentDTO2.setDepartmentName("name2");
-        mockMvc = standaloneSetup(departmentRestController)
+        mockMvc = MockMvcBuilders.standaloneSetup(departmentRestController)
                 .setMessageConverters(new MappingJackson2HttpMessageConverter())
                 .build();
     }
@@ -58,7 +60,8 @@ public class DepartmentControllerMockTest {
 
     @Test
     public void getDepartments() throws Exception {
-        expect(departmentService.getDepartmentDTOs()).andReturn(Arrays.asList(departmentDTO1, departmentDTO2));
+        expect(departmentService.getDepartmentDTOs())
+                .andReturn(Arrays.asList(departmentDTO1, departmentDTO2));
         replay(departmentService);
 
         mockMvc.perform(
@@ -72,4 +75,5 @@ public class DepartmentControllerMockTest {
                 .andExpect(jsonPath("$[1].departmentId", is(2)))
                 .andExpect(jsonPath("$[1].departmentName", is("name2")));
     }
+
 }

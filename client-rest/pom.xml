@@ -12,10 +12,6 @@
     <artifactId>client-rest</artifactId>
 
     <dependencies>
-        <dependency>
-            <groupId>com.epam.brest.course</groupId>
-            <artifactId>model</artifactId>
-        </dependency>
 
         <dependency>
             <groupId>com.epam.brest.course</groupId>
