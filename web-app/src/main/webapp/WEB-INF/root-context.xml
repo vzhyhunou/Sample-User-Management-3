@@ -29,7 +29,7 @@
     </bean>-->
     <bean id="departmentService" class="com.epam.brest.course.client.rest.DepartmentConsumerRest">
         <constructor-arg index="0" type="java.lang.String" value="${protocol}://${host}:${port}/${point.departments}"/>
-        <property name="restTemplate" ref="restTemplate"/>
+        <constructor-arg index="1" ref="restTemplate"/>
     </bean>
 
     <!-- Use spring servlet for all requests, including static resources -->
