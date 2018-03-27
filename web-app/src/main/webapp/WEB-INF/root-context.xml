@@ -27,8 +27,15 @@
     <!--<bean id="departmentService" class="com.epam.brest.course.service.DepartmentServiceImpl">
         <constructor-arg ref="departmentDao"/>
     </bean>-->
+    <bean id="restTemplate" class="org.springframework.web.client.RestTemplate">
+        <property name="messageConverters">
+            <list>
+                <bean class="org.springframework.http.converter.json.MappingJackson2HttpMessageConverter"/>
+            </list>
+        </property>
+    </bean>
     <bean id="departmentService" class="com.epam.brest.course.client.rest.DepartmentConsumerRest">
-        <constructor-arg index="0" type="java.lang.String" value="${protocol}://${host}:${port}/${point.departments}"/>
+        <constructor-arg index="0" value="${protocol}://${host}:${port}/${point.departments}"/>
         <constructor-arg index="1" ref="restTemplate"/>
     </bean>
 
@@ -78,19 +85,4 @@
         </property>
         <property name="ignoreUnresolvablePlaceholders" value="true"/>
     </bean>
-
-
-
-
-    <bean id="customResponseErrorHandler" class="com.epam.brest.course.client.rest.CustomResponseErrorHandler"/>
-
-    <bean id="restTemplate" class="org.springframework.web.client.RestTemplate">
-        <property name="messageConverters">
-            <list>
-                <bean class="org.springframework.http.converter.json.MappingJackson2HttpMessageConverter"/>
-            </list>
-        </property>
-        <property name="errorHandler" ref="customResponseErrorHandler"/>
-    </bean>
-
 </beans>

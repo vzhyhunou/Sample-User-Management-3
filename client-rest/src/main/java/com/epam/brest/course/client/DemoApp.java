@@ -17,37 +17,40 @@ public class DemoApp {
 
     private Scanner sc = new Scanner(System.in);
 
-    public static void main(String[] args) {
-
-        ClassPathXmlApplicationContext ctx = new ClassPathXmlApplicationContext("spring-context.xml");
-        DepartmentService departmentService = ctx.getBean(DepartmentService.class);
-
-        DemoApp demoApp = new DemoApp(departmentService);
-        demoApp.menu();
-    }
-
     public DemoApp(DepartmentService departmentService) {
         this.departmentService = departmentService;
     }
 
-    private void menu() {
+    public static void main(String[] args) {
 
-        int swValue = 0;
+        ClassPathXmlApplicationContext ctx = new ClassPathXmlApplicationContext("spring-context.xml");
+        DepartmentService departmentService = ctx.getBean(DepartmentService.class);
+        DemoApp demoApp = new DemoApp(departmentService);
+        demoApp.menu();
+    }
+
+    private void menu() {
 
         System.out.println("=================================");
         System.out.println("|   MENU SELECTION DEMO         |");
         System.out.println("=================================");
         System.out.println("| Options:                      |");
-        System.out.println("|        1. Get all departments |");
-        System.out.println("|        2. Get department by id|");
-        System.out.println("|        3. Add department      |");
-        System.out.println("|        4. Exit                |");
+        System.out.println("|      1. Get all departments   |");
+        System.out.println("|      2. Get department by id  |");
+        System.out.println("|      3. Add department        |");
+        System.out.println("|      4. Exit                  |");
         System.out.println("=================================");
+
+        int swValue = 0;
         while (swValue != 4) {
             System.out.print("Select option: ");
             if (sc.hasNextInt()) {
                 swValue = sc.nextInt();
-                checkValue(swValue);
+                try {
+                    checkValue(swValue);
+                } catch (ServerDataAccessException e) {
+                    System.out.println("RESPONSE ERR: " + e.getMessage());
+                }
             } else {
                 System.out.println("Bad value: " + sc.next());
             }
@@ -66,11 +69,10 @@ public class DemoApp {
                 addDepartment();
                 break;
             case 4:
-                System.out.println("Exit.");
+                System.out.println("Good bye.");
                 break;
             default:
                 System.out.println("Invalid selection.");
-                break;
         }
     }
 
@@ -80,37 +82,25 @@ public class DemoApp {
     }
 
     private void getDepartmentById() {
-        int id = 0;
         System.out.print("    Enter department id: ");
-        if (sc.hasNextLine()) {
-            id = sc.nextInt();
-        }
-
-        try {
+        int id;
+        if (sc.hasNextInt() && (id = sc.nextInt()) > 0) {
             Department department = departmentService.getDepartmentById(id);
-            System.out.println("    Department: " + department);
-        } catch (ServerDataAccessException ex) {
-            System.out.println("    ERROR: " + ex.getMessage());
+            System.out.println("department: " + department);
+        } else {
+            System.out.println("Bad value: " + sc.next());
         }
     }
 
     private void addDepartment() {
-        String name = "";
         System.out.print("    Enter department name: ");
-        if (sc.hasNextLine()) {
-            name = sc.next();
-        }
-        String desc = "";
-        System.out.print("    Enter department desc: ");
-        if (sc.hasNextLine()) {
-            desc = sc.next();
-        }
+        String name = sc.next();
 
-        try {
-            Department department = departmentService.addDepartment(new Department(name, desc));
-            System.out.println("    Department: " + department);
-        } catch (ServerDataAccessException ex) {
-            System.out.println("    ERROR: " + ex.getMessage());
-        }
+        System.out.print("    Enter department description: ");
+        String desc = sc.next();
+
+        Department department = new Department(name, desc);
+        department = departmentService.addDepartment(department);
+        System.out.println("department: " + department);
     }
 }

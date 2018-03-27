@@ -37,4 +37,13 @@ public class DepartmentDTO {
     public void setAvgSalary(Integer avgSalary) {
         this.avgSalary = avgSalary;
     }
+
+    @Override
+    public String toString() {
+        return "DepartmentDTO{" +
+                "departmentId=" + departmentId +
+                ", departmentName='" + departmentName + '\'' +
+                ", avgSalary=" + avgSalary +
+                '}';
+    }
 }
