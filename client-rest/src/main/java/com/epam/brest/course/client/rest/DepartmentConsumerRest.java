@@ -36,10 +36,11 @@ public class DepartmentConsumerRest implements DepartmentService {
 
     @Override
     public void updateDepartment(Department department) {
-
+        restTemplate.put(url, department);
     }
 
     @Override
+    @Deprecated
     public void updateDepartmentDescription(Integer departmentId, String description) {
 
     }
@@ -59,6 +60,6 @@ public class DepartmentConsumerRest implements DepartmentService {
 
     @Override
     public void deleteDepartmentById(Integer id) {
-
+        restTemplate.delete(url + "/" + id);
     }
 }

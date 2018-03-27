@@ -2,7 +2,6 @@ package com.epam.brest.course.service;
 
 import com.epam.brest.course.dto.DepartmentDTO;
 import com.epam.brest.course.model.Department;
-import org.springframework.dao.DataAccessException;
 
 import java.util.Collection;
 
@@ -16,7 +15,6 @@ public interface DepartmentService {
      *
      * @param departmentId id
      * @return Department
-     * @throws DataAccessException on data access error.
      */
     Department getDepartmentById(Integer departmentId);
 
@@ -48,7 +46,6 @@ public interface DepartmentService {
      * Get departments list.
      *
      * @return departments list.
-     * @throws DataAccessException on data access error.
      */
     Collection<Department> getDepartments();
 

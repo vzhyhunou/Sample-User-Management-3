@@ -19,14 +19,14 @@ public class DepartmentRestController {
     @Autowired
     private DepartmentService departmentService;
 
-    //curl -v localhost:8080/departments
+    //curl -v localhost:8088/departments
     @GetMapping(value = "/departments")
     Collection<DepartmentDTO> departments() {
         LOGGER.debug("departments()");
         return departmentService.getDepartmentDTOs();
     }
 
-    //curl -v localhost:8080/departments/1
+    //curl -v localhost:8088/departments/1
     @GetMapping(value = "/departments/{id}")
     @ResponseStatus(HttpStatus.FOUND)
     Department departmentById(@PathVariable(value = "id") Integer id) {
@@ -34,7 +34,7 @@ public class DepartmentRestController {
         return departmentService.getDepartmentById(id);
     }
 
-    //curl -H "Content-Type: application/json" -X POST -d '{"departmentName":"xyz","description":"xyz"}' -v localhost:8080/departments
+    //curl -H "Content-Type: application/json" -X POST -d '{"departmentName":"xyz","description":"xyz"}' -v localhost:8088/departments
     @PostMapping(value = "/departments")
     @ResponseStatus(HttpStatus.CREATED)
     Department addDepartment(@RequestBody Department department) {
@@ -42,10 +42,17 @@ public class DepartmentRestController {
         return departmentService.addDepartment(department);
     }
 
+    //curl -X "DELETE" localhost:8088/departments/1
     @DeleteMapping(value = "/departments/{id}")
     @ResponseStatus(HttpStatus.FOUND)
     void deleteDepartment(@PathVariable(value = "id") Integer id) {
         LOGGER.debug("deleteDepartment({})", id);
         departmentService.deleteDepartmentById(id);
+    }
+
+    @PutMapping(value = "/departments")
+    void updateDepartment(@RequestBody Department department){
+        LOGGER.debug("updateDepartment({})", department);
+        departmentService.updateDepartment(department);
     }
 }
