@@ -1,5 +1,8 @@
 import {Component, OnInit} from '@angular/core';
+import {Observable} from "rxjs/Observable";
+
 import {DepartmentService} from "../../services/department.service";
+import {DepartmentDto} from "../../model/department-dto";
 
 @Component({
   selector: 'app-departments',
@@ -8,19 +11,17 @@ import {DepartmentService} from "../../services/department.service";
 })
 export class DepartmentsComponent implements OnInit {
 
+  dtos: Observable<Array<DepartmentDto>>;
+
   constructor(private departmentService: DepartmentService) {
   }
 
   ngOnInit() {
-    this.getDepartmentDTOs();
+    this.dtos = this.getDepartmentDTOs();
   }
 
   getDepartmentDTOs() {
-    this.departmentService.getDepartmentDTOs()
-      .subscribe(
-        data => console.log(JSON.stringify(data)),
-        error => console.log('Server error')
-      )
+    return this.departmentService.getDepartmentDTOs();
   }
 }
 
