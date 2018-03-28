@@ -3,6 +3,7 @@ import {NgModule} from '@angular/core';
 import {Router} from "@angular/router";
 import {AppRoutingModule} from './app-routing.module';
 import {AppComponent} from './app.component';
+import {NgbModule} from '@ng-bootstrap/ng-bootstrap';
 
 import {DepartmentsComponent} from './components/departments/departments.component';
 import {EmployeesComponent} from './components/employees/employees.component';
@@ -18,6 +19,7 @@ import {NavigationComponent} from './components/navigation/navigation.component'
     NavigationComponent
   ],
   imports: [
+    NgbModule.forRoot(),
     BrowserModule,
     AppRoutingModule
   ],
