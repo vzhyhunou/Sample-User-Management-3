@@ -7,13 +7,15 @@ import {AppComponent} from './app.component';
 import {DepartmentsComponent} from './components/departments/departments.component';
 import {EmployeesComponent} from './components/employees/employees.component';
 import {PageNotFoundComponent} from './components/page-not-found/page-not-found.component';
+import {NavigationComponent} from './components/navigation/navigation.component';
 
 @NgModule({
   declarations: [
     AppComponent,
     DepartmentsComponent,
     EmployeesComponent,
-    PageNotFoundComponent
+    PageNotFoundComponent,
+    NavigationComponent
   ],
   imports: [
     BrowserModule,
