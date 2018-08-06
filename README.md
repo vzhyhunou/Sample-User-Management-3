@@ -20,6 +20,12 @@ You can get it at:
 #### Build project
 
         $ mvn clean install
+
+        There is a Maven wrapper included with the project. In order to use it substitute "mvn" command with the wrapper script:
+
+        $ ./mvnw clean install
+
+        Windows users should use mvnw.cmd script correspondingly. Please note that calling Maven wrapper for the very first time might take a while to complete. Wrapper will be downloading Maven executable from Maven repos and storing it locally. All the subsequent calls will have no delays.
         
 #### Preparing reports
       
