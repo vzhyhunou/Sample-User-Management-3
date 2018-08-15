@@ -62,6 +62,10 @@ Windows users should use mvnw.cmd script correspondingly. Please note that calli
 
        http://localhost:8080
 
+#### Using command line rest client
+
+       cd client-rest/target && java -jar client-rest-1.0-SNAPSHOT.jar
+
 #### Travis CI integration
 
         https://travis-ci.org/Brest-Java-Course-2018/Sample-User-Management/
