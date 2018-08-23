@@ -1,6 +1,5 @@
 package com.epam.brest.course.web_app.controllers;
 
-import com.epam.brest.course.dto.DepartmentDTO;
 import com.epam.brest.course.model.Department;
 import com.epam.brest.course.service.DepartmentService;
 import org.apache.logging.log4j.LogManager;
@@ -14,7 +13,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 
 import javax.validation.Valid;
-import java.util.Collection;
+import java.util.stream.Collectors;
 
 /**
  * Department controller.
@@ -35,8 +34,8 @@ public class DepartmentController {
     @GetMapping(value = "/departments")
     public final String departments(Model model) {
         LOGGER.debug("getDepartments({})", model);
-        Collection<DepartmentDTO> departments = departmentService.getDepartmentDTOs();
-        model.addAttribute("departments", departments);
+        model.addAttribute("departments", departmentService.getDepartmentDTOs()
+                .collect(Collectors.toList()));
         return "departments";
     }
 

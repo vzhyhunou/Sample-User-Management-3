@@ -17,6 +17,8 @@ import org.springframework.jdbc.support.KeyHolder;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.List;
+import java.util.Optional;
+import java.util.stream.Stream;
 
 public class DepartmentDaoImpl implements DepartmentDao {
 
@@ -55,74 +57,60 @@ public class DepartmentDaoImpl implements DepartmentDao {
     }
 
     @Override
-    public List<Department> getDepartments() {
+    public Stream<Department> getDepartments() {
         LOGGER.debug("getDepartments()");
         List<Department> departments =
                 namedParameterJdbcTemplate.getJdbcOperations().query(selectSql, new DepartmentRowMapper());
-        return departments;
+        return departments.stream();
     }
 
     @Override
-    public List<DepartmentDTO> getDepartmentDTOs() {
+    public Stream<DepartmentDTO> getDepartmentDTOs() {
         LOGGER.debug("getDepartmentDTOs()");
         List<DepartmentDTO> list =
                 namedParameterJdbcTemplate.getJdbcOperations().query(selectAvgSalarySql, new DepartmentDTORowMapper());
-        return list;
+        return list.stream();
     }
 
-//    @Override
-//    public Department getDepartmentById(Integer departmentId) {
-//        SqlParameterSource namedParameters =
-//                new MapSqlParameterSource(DEPARTMENT_ID, departmentId);
-//        Department department =
-//                namedParameterJdbcTemplate.queryForObject(selectByIdSql, namedParameters,
-//                        new DepartmentRowMapper());
-//        return department;
-//    }
-
     @Override
-    public Department getDepartmentById(Integer departmentId) {
+    public Optional<Department> getDepartmentById(Integer departmentId) {
         LOGGER.debug("getDepartmentById({})", departmentId);
         SqlParameterSource namedParameters =
                 new MapSqlParameterSource(DEPARTMENT_ID, departmentId);
         Department department = namedParameterJdbcTemplate.queryForObject(selectByIdSql, namedParameters,
                 BeanPropertyRowMapper.newInstance(Department.class));
-        return department;
+        return Optional.ofNullable(department);
     }
 
     @Override
-    public Department addDepartment(Department department) {
+    public int addDepartment(Department department) {
         LOGGER.debug("addDepartment({})", department);
         MapSqlParameterSource namedParameters =
                 new MapSqlParameterSource("departmentName", department.getDepartmentName());
-        Integer result =
-                namedParameterJdbcTemplate.queryForObject(checkDepartmentSql, namedParameters, Integer.class);
+        Optional.of(namedParameterJdbcTemplate.queryForObject(checkDepartmentSql, namedParameters, Integer.class))
+                .filter(r -> r == 0)
+                .orElseThrow(() -> new IllegalArgumentException("Department with the same name already exists in DB."));
 
-        LOGGER.debug("result({})", result);
-        if (result == 0) {
-            namedParameters = new MapSqlParameterSource();
-            namedParameters.addValue("departmentName", department.getDepartmentName());
-            namedParameters.addValue("description", department.getDescription());
+        namedParameters = new MapSqlParameterSource();
+        namedParameters.addValue("departmentName", department.getDepartmentName());
+        namedParameters.addValue("description", department.getDescription());
 
-            KeyHolder generatedKeyHolder = new GeneratedKeyHolder();
-            namedParameterJdbcTemplate.update(insertSql, namedParameters, generatedKeyHolder);
-            department.setDepartmentId(generatedKeyHolder.getKey().intValue());
-        } else {
-            throw new IllegalArgumentException("Department with the same name already exists in DB.");
-        }
-
-        return department;
+        KeyHolder generatedKeyHolder = new GeneratedKeyHolder();
+        Optional.of(namedParameterJdbcTemplate.update(insertSql, namedParameters, generatedKeyHolder))
+                .filter(r -> r > 0)
+                .orElseThrow(() -> new RuntimeException("Failed to add a department to DB"));
+        return generatedKeyHolder.getKey().intValue();
     }
 
     @Override
-    public void updateDepartment(Department department) {
+    public int updateDepartment(Department department) {
         SqlParameterSource namedParameter = new BeanPropertySqlParameterSource(department);
-        namedParameterJdbcTemplate.update(updateSql, namedParameter);
+        return namedParameterJdbcTemplate.update(updateSql, namedParameter);
     }
 
     @Override
-    public void deleteDepartmentById(Integer departmentId) {
-        namedParameterJdbcTemplate.getJdbcOperations().update(deleteSql, departmentId);
+    public int deleteDepartmentById(Integer departmentId) {
+        return namedParameterJdbcTemplate.getJdbcOperations().update(deleteSql, departmentId);
     }
 
     private class DepartmentRowMapper implements RowMapper<Department> {

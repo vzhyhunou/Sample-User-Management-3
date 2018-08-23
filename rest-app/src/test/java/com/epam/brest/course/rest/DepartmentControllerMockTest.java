@@ -61,7 +61,7 @@ public class DepartmentControllerMockTest {
     @Test
     public void getDepartments() throws Exception {
         expect(departmentService.getDepartmentDTOs())
-                .andReturn(Arrays.asList(departmentDTO1, departmentDTO2));
+                .andReturn(Arrays.asList(departmentDTO1, departmentDTO2).stream());
         replay(departmentService);
 
         mockMvc.perform(

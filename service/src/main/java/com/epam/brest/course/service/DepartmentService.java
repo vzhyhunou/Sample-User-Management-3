@@ -3,7 +3,7 @@ package com.epam.brest.course.service;
 import com.epam.brest.course.dto.DepartmentDTO;
 import com.epam.brest.course.model.Department;
 
-import java.util.Collection;
+import java.util.stream.Stream;
 
 /**
  * Department Service Interface.
@@ -47,14 +47,14 @@ public interface DepartmentService {
      *
      * @return departments list.
      */
-    Collection<Department> getDepartments();
+    Stream<Department> getDepartments();
 
     /**
      * Get department DTOs list.
      *
      * @return department DTOs list.
      */
-    Collection<DepartmentDTO> getDepartmentDTOs();
+    Stream<DepartmentDTO> getDepartmentDTOs();
 
     /**
      * Delete department.

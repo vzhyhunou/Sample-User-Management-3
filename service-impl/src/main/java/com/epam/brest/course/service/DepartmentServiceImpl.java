@@ -7,7 +7,8 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.Collection;
+import java.util.Optional;
+import java.util.stream.Stream;
 
 @Transactional
 public class DepartmentServiceImpl implements DepartmentService {
@@ -23,37 +24,44 @@ public class DepartmentServiceImpl implements DepartmentService {
     @Override
     public Department getDepartmentById(Integer departmentId) {
         LOGGER.debug("getDepartmentById({})", departmentId);
-        return departmentDao.getDepartmentById(departmentId);
+        return departmentDao.getDepartmentById(departmentId)
+                .orElseThrow(() -> new RuntimeException("Failed to get department from DB"));
     }
 
     @Override
     public Department addDepartment(Department department) {
         LOGGER.debug("addDepartment({})", department);
-        return departmentDao.addDepartment(department);
+        department.setDepartmentId(departmentDao.addDepartment(department));
+        return department;
     }
 
     @Override
     public void updateDepartment(Department department) {
         LOGGER.debug("updateDepartment({})", department);
-        departmentDao.updateDepartment(department);
+        Optional.of(departmentDao.updateDepartment(department))
+                .filter(r -> r > 0)
+                .orElseThrow(() -> new RuntimeException("Failed to update department in DB"));
     }
 
     @Override
     public void updateDepartmentDescription(Integer departmentId, String description) {
         LOGGER.debug("updateDepartmentDescription({}, {})", departmentId, description);
-        Department department = departmentDao.getDepartmentById(departmentId);
-        department.setDescription(description);
-        departmentDao.updateDepartment(department);
+        departmentDao.getDepartmentById(departmentId)
+                .map(d -> {
+                    d.setDescription(description);
+                    return departmentDao.updateDepartment(d);
+                })
+                .orElseThrow(() -> new RuntimeException("Failed to update department description"));
     }
 
     @Override
-    public Collection<Department> getDepartments() {
+    public Stream<Department> getDepartments() {
         LOGGER.debug("getDepartments()");
         return departmentDao.getDepartments();
     }
 
     @Override
-    public Collection<DepartmentDTO> getDepartmentDTOs() {
+    public Stream<DepartmentDTO> getDepartmentDTOs() {
         LOGGER.debug("getDepartmentDTOs()");
         return departmentDao.getDepartmentDTOs();
     }
@@ -61,6 +69,8 @@ public class DepartmentServiceImpl implements DepartmentService {
     @Override
     public void deleteDepartmentById(Integer id) {
         LOGGER.debug("deleteDepartmentById({})", id);
-        departmentDao.deleteDepartmentById(id);
+        Optional.of(departmentDao.deleteDepartmentById(id))
+                .filter(r -> r > 0)
+                .orElseThrow(() -> new RuntimeException("Failed to delete department from DB"));
     }
 }

@@ -9,6 +9,8 @@ import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.ParameterizedTypeReference;
+import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.test.context.ContextConfiguration;
@@ -18,6 +20,7 @@ import org.springframework.web.client.RestTemplate;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import static org.easymock.EasyMock.*;
 
@@ -55,12 +58,13 @@ public class DepartmentServiceRestMockTest {
 
     @Test
     public void getAllDepartments() {
-        List departments = Arrays.asList(departmentDTO1, departmentDTO2);
+        List<DepartmentDTO> departments = Arrays.asList(departmentDTO1, departmentDTO2);
         ResponseEntity entity = new ResponseEntity<>(departments, HttpStatus.OK);
-        expect(mockRestTemplate.getForEntity(anyString(), anyObject())).andReturn(entity);
+        expect(mockRestTemplate.exchange(anyString(), anyObject(), anyObject(), anyObject(ParameterizedTypeReference.class))).andReturn(entity);
         replay(mockRestTemplate);
 
-        Collection<DepartmentDTO> results = departmentService.getDepartmentDTOs();
+        Collection<DepartmentDTO> results = departmentService.getDepartmentDTOs()
+                .collect(Collectors.toList());
 
         Assert.assertNotNull(results);
         Assert.assertEquals(2, results.size());
