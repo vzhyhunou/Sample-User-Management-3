@@ -60,7 +60,7 @@ public class DepartmentDaoImpl implements DepartmentDao {
     public Stream<Department> getDepartments() {
         LOGGER.debug("getDepartments()");
         List<Department> departments =
-                namedParameterJdbcTemplate.getJdbcOperations().query(selectSql, new DepartmentRowMapper());
+                namedParameterJdbcTemplate.query(selectSql, new DepartmentRowMapper());
         return departments.stream();
     }
 
@@ -68,7 +68,7 @@ public class DepartmentDaoImpl implements DepartmentDao {
     public Stream<DepartmentDTO> getDepartmentDTOs() {
         LOGGER.debug("getDepartmentDTOs()");
         List<DepartmentDTO> list =
-                namedParameterJdbcTemplate.getJdbcOperations().query(selectAvgSalarySql, new DepartmentDTORowMapper());
+                namedParameterJdbcTemplate.query(selectAvgSalarySql, new DepartmentDTORowMapper());
         return list.stream();
     }
 
@@ -85,32 +85,46 @@ public class DepartmentDaoImpl implements DepartmentDao {
     @Override
     public int addDepartment(Department department) {
         LOGGER.debug("addDepartment({})", department);
-        MapSqlParameterSource namedParameters =
-                new MapSqlParameterSource("departmentName", department.getDepartmentName());
-        Optional.of(namedParameterJdbcTemplate.queryForObject(checkDepartmentSql, namedParameters, Integer.class))
-                .filter(r -> r == 0)
+        return Optional.of(department)
+                .filter(this::isNameUnique)
+                .map(this::insertDepartment)
                 .orElseThrow(() -> new IllegalArgumentException("Department with the same name already exists in DB."));
+    }
 
-        namedParameters = new MapSqlParameterSource();
+    private boolean isNameUnique(Department department) {
+        return namedParameterJdbcTemplate.queryForObject(checkDepartmentSql,
+                new MapSqlParameterSource("departmentName", department.getDepartmentName()),
+                Integer.class) == 0;
+    }
+
+    private int insertDepartment(Department department) {
+        MapSqlParameterSource namedParameters = new MapSqlParameterSource();
         namedParameters.addValue("departmentName", department.getDepartmentName());
         namedParameters.addValue("description", department.getDescription());
 
         KeyHolder generatedKeyHolder = new GeneratedKeyHolder();
-        Optional.of(namedParameterJdbcTemplate.update(insertSql, namedParameters, generatedKeyHolder))
-                .filter(r -> r > 0)
+        return Optional.of(namedParameterJdbcTemplate.update(insertSql, namedParameters, generatedKeyHolder))
+                .filter(this::successfullyUpdated)
+                .map(n -> generatedKeyHolder.getKey().intValue())
                 .orElseThrow(() -> new RuntimeException("Failed to add a department to DB"));
-        return generatedKeyHolder.getKey().intValue();
     }
 
     @Override
-    public int updateDepartment(Department department) {
-        SqlParameterSource namedParameter = new BeanPropertySqlParameterSource(department);
-        return namedParameterJdbcTemplate.update(updateSql, namedParameter);
+    public void updateDepartment(Department department) {
+        Optional.of(namedParameterJdbcTemplate.update(updateSql, new BeanPropertySqlParameterSource(department)))
+                .filter(this::successfullyUpdated)
+                .orElseThrow(() -> new RuntimeException("Failed to update department in DB"));
     }
 
     @Override
-    public int deleteDepartmentById(Integer departmentId) {
-        return namedParameterJdbcTemplate.getJdbcOperations().update(deleteSql, departmentId);
+    public void deleteDepartmentById(Integer departmentId) {
+        Optional.of(namedParameterJdbcTemplate.getJdbcOperations().update(deleteSql, departmentId))
+                .filter(this::successfullyUpdated)
+                .orElseThrow(() -> new RuntimeException("Failed to delete department from DB"));
+    }
+
+    private boolean successfullyUpdated(int numRowsUpdated) {
+        return numRowsUpdated > 0;
     }
 
     private class DepartmentRowMapper implements RowMapper<Department> {

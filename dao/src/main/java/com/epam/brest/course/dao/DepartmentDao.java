@@ -46,13 +46,13 @@ public interface DepartmentDao {
      *
      * @param department department
      */
-    int updateDepartment(Department department);
+    void updateDepartment(Department department);
 
     /**
      * Delete department.
      *
      * @param id department id
      */
-    int deleteDepartmentById(Integer id);
+    void deleteDepartmentById(Integer id);
 
 }

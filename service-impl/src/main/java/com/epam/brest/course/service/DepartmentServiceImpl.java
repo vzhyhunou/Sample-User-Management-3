@@ -7,7 +7,6 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.Optional;
 import java.util.stream.Stream;
 
 @Transactional
@@ -38,9 +37,7 @@ public class DepartmentServiceImpl implements DepartmentService {
     @Override
     public void updateDepartment(Department department) {
         LOGGER.debug("updateDepartment({})", department);
-        Optional.of(departmentDao.updateDepartment(department))
-                .filter(r -> r > 0)
-                .orElseThrow(() -> new RuntimeException("Failed to update department in DB"));
+        departmentDao.updateDepartment(department);
     }
 
     @Override
@@ -49,10 +46,10 @@ public class DepartmentServiceImpl implements DepartmentService {
         departmentDao.getDepartmentById(departmentId)
                 .map(d -> {
                     d.setDescription(description);
-                    return departmentDao.updateDepartment(d);
+                    return d;
                 })
-                .orElseThrow(() -> new RuntimeException("Failed to update department description"));
-    }
+                .ifPresent(departmentDao::updateDepartment);
+   }
 
     @Override
     public Stream<Department> getDepartments() {
@@ -69,8 +66,6 @@ public class DepartmentServiceImpl implements DepartmentService {
     @Override
     public void deleteDepartmentById(Integer id) {
         LOGGER.debug("deleteDepartmentById({})", id);
-        Optional.of(departmentDao.deleteDepartmentById(id))
-                .filter(r -> r > 0)
-                .orElseThrow(() -> new RuntimeException("Failed to delete department from DB"));
-    }
+        departmentDao.deleteDepartmentById(id);
+   }
 }
