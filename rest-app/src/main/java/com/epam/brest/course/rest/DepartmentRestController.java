@@ -10,6 +10,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Collection;
+import java.util.stream.Collectors;
 
 @CrossOrigin
 @RestController
@@ -24,7 +25,7 @@ public class DepartmentRestController {
     @GetMapping(value = "/departments")
     Collection<DepartmentDTO> departments() {
         LOGGER.debug("departments()");
-        return departmentService.getDepartmentDTOs();
+        return departmentService.getDepartmentDTOs().collect(Collectors.toList());
     }
 
     //curl -v localhost:8088/departments/1
@@ -56,4 +57,21 @@ public class DepartmentRestController {
         LOGGER.debug("updateDepartment({})", department);
         departmentService.updateDepartment(department);
     }
+
+    @GetMapping(value = "/departments/names")
+    String departmentNames() {
+        LOGGER.debug("department names");
+        return departmentService.getDepartmentDTOs()
+                .map(DepartmentDTO::getDepartmentName)
+                .collect(Collectors.joining("|"));
+    }
+
+    @GetMapping(value = "/departments/paid")
+    Collection<DepartmentDTO> departmentsPaid() {
+        LOGGER.debug("departments paid");
+        return departmentService.getDepartmentDTOs()
+                .filter(d -> d.getAvgSalary() > 0)
+                .collect(Collectors.toList());
+    }
+
 }

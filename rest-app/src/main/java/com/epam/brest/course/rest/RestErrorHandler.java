@@ -20,4 +20,9 @@ public class RestErrorHandler {
         LOGGER.debug("handleDataAccessException({})", e);
         return "DataAccessException: " + e.getLocalizedMessage();
     }
+
+    @ExceptionHandler(RuntimeException.class)
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    public void badRequestResponse() {}
+
 }

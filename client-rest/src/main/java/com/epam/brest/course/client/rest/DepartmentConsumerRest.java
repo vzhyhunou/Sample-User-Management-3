@@ -3,11 +3,13 @@ package com.epam.brest.course.client.rest;
 import com.epam.brest.course.dto.DepartmentDTO;
 import com.epam.brest.course.model.Department;
 import com.epam.brest.course.service.DepartmentService;
+import org.springframework.core.ParameterizedTypeReference;
+import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.client.RestTemplate;
 
-import java.util.Collection;
 import java.util.List;
+import java.util.stream.Stream;
 
 public class DepartmentConsumerRest implements DepartmentService {
 
@@ -46,16 +48,15 @@ public class DepartmentConsumerRest implements DepartmentService {
     }
 
     @Override
-    public Collection<Department> getDepartments() {
+    public Stream<Department> getDepartments() {
         return null;
     }
 
     @Override
-    @SuppressWarnings("unchecked")
-    public Collection<DepartmentDTO> getDepartmentDTOs() {
-        ResponseEntity responseEntity = restTemplate.getForEntity(url, List.class);
-        List<DepartmentDTO> departments = (List<DepartmentDTO>)responseEntity.getBody();
-        return departments;
+    public Stream<DepartmentDTO> getDepartmentDTOs() {
+        ResponseEntity<List<DepartmentDTO>> responseEntity =
+                restTemplate.exchange(url, HttpMethod.GET, null, new ParameterizedTypeReference<List<DepartmentDTO>>() {});
+        return responseEntity.getBody().stream();
     }
 
     @Override

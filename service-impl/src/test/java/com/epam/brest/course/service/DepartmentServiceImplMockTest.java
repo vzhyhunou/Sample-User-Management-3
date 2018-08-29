@@ -2,7 +2,6 @@ package com.epam.brest.course.service;
 
 import com.epam.brest.course.dao.DepartmentDao;
 import com.epam.brest.course.model.Department;
-import org.easymock.Capture;
 import org.easymock.EasyMock;
 import org.junit.Assert;
 import org.junit.Test;
@@ -10,6 +9,10 @@ import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
+
+import java.util.Optional;
+
+import static org.easymock.EasyMock.anyObject;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(locations = {"classpath:service-mock-test.xml"})
@@ -27,15 +30,13 @@ public class DepartmentServiceImplMockTest {
 
     @Test
     public void updateDepartmentDescription() {
-        EasyMock.expect(mockDepartmentDao.getDepartmentById(EasyMock.anyInt())).andReturn(DEPARTMENT);
-        Capture<Department> captureArgument = Capture.newInstance();
-        mockDepartmentDao.updateDepartment(EasyMock.capture(captureArgument));
+        EasyMock.expect(mockDepartmentDao.getDepartmentById(EasyMock.anyInt())).andReturn(Optional.of(DEPARTMENT));
+        mockDepartmentDao.updateDepartment(anyObject());
         EasyMock.expectLastCall();
         EasyMock.replay(mockDepartmentDao);
 
         departmentService.updateDepartmentDescription(ID, DESC);
 
-        Department department = captureArgument.getValue();
-        Assert.assertEquals(DESC, department.getDescription());
+        Assert.assertEquals(DESC, DEPARTMENT.getDescription());
     }
 }

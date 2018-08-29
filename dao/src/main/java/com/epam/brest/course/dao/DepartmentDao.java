@@ -3,7 +3,8 @@ package com.epam.brest.course.dao;
 import com.epam.brest.course.dto.DepartmentDTO;
 import com.epam.brest.course.model.Department;
 
-import java.util.List;
+import java.util.Optional;
+import java.util.stream.Stream;
 
 /**
  * Department DAO Interface.
@@ -15,14 +16,14 @@ public interface DepartmentDao {
      *
      * @return departments list.
      */
-    List<Department> getDepartments();
+    Stream<Department> getDepartments();
 
     /**
      * Get department DTOs list.
      *
      * @return department DTOs list.
      */
-    List<DepartmentDTO> getDepartmentDTOs();
+    Stream<DepartmentDTO> getDepartmentDTOs();
 
     /**
      * Get Department By Id.
@@ -30,7 +31,7 @@ public interface DepartmentDao {
      * @param departmentId id
      * @return Department
      */
-    Department getDepartmentById(Integer departmentId);
+    Optional<Department> getDepartmentById(Integer departmentId);
 
     /**
      * Persist new department.
@@ -38,7 +39,7 @@ public interface DepartmentDao {
      * @param department new department
      * @return department with id.
      */
-    Department addDepartment(Department department);
+    int addDepartment(Department department);
 
     /**
      * Update department.

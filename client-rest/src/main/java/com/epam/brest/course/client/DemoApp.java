@@ -1,11 +1,9 @@
 package com.epam.brest.course.client;
 
-import com.epam.brest.course.dto.DepartmentDTO;
 import com.epam.brest.course.model.Department;
 import com.epam.brest.course.service.DepartmentService;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 
-import java.util.Collection;
 import java.util.Scanner;
 
 /**
@@ -77,8 +75,9 @@ public class DemoApp {
     }
 
     private void getAllDepartments() {
-        Collection<DepartmentDTO> departments = departmentService.getDepartmentDTOs();
-        System.out.println("departments: " + departments);
+        System.out.println("departments: ");
+        departmentService.getDepartmentDTOs()
+                .forEach(System.out::println);
     }
 
     private void getDepartmentById() {
