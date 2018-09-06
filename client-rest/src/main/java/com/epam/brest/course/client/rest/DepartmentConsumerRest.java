@@ -23,44 +23,45 @@ public class DepartmentConsumerRest implements DepartmentService {
     }
 
     @Override
-    public Department getDepartmentById(Integer departmentId) {
-        ResponseEntity<Department> responseEntity = restTemplate.getForEntity(url + "/" + departmentId, Department.class);
-        Department department = responseEntity.getBody();
+    public Department findById(final Integer id) {
+        ResponseEntity<Department> responseEntity = restTemplate.getForEntity(url + "/" + id, Department.class);
+        final Department department = responseEntity.getBody();
         return department;
     }
 
     @Override
-    public Department addDepartment(Department department) {
+    public Department create(Department department) {
         ResponseEntity<Department> responseEntity = restTemplate.postForEntity(url, department, Department.class);
-        Department result = responseEntity.getBody();
+        final Department result = responseEntity.getBody();
         return result;
     }
 
     @Override
-    public void updateDepartment(Department department) {
+    public void update(final Department department) {
         restTemplate.put(url, department);
     }
 
     @Override
     @Deprecated
     public void updateDepartmentDescription(Integer departmentId, String description) {
-
+        //FIXME remove deprecated
     }
 
     @Override
-    public Stream<Department> getDepartments() {
+    public Stream<Department> findAll() {
+        //FIXME implement
         return null;
     }
 
     @Override
-    public Stream<DepartmentDTO> getDepartmentDTOs() {
+    public Stream<DepartmentDTO> findAllDepartmentDTOs() {
         ResponseEntity<List<DepartmentDTO>> responseEntity =
                 restTemplate.exchange(url, HttpMethod.GET, null, new ParameterizedTypeReference<List<DepartmentDTO>>() {});
         return responseEntity.getBody().stream();
     }
 
     @Override
-    public void deleteDepartmentById(Integer id) {
+    public void delete(Integer id) {
         restTemplate.delete(url + "/" + id);
     }
 }

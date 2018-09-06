@@ -14,28 +14,28 @@ public class DepartmentServiceImpl implements DepartmentService {
 
     private static final Logger LOGGER = LogManager.getLogger();
 
-    private DepartmentDao departmentDao;
+    private final DepartmentDao departmentDao;
 
-    public DepartmentServiceImpl(DepartmentDao departmentDao) {
+    public DepartmentServiceImpl(final DepartmentDao departmentDao) {
         this.departmentDao = departmentDao;
     }
 
     @Override
-    public Department getDepartmentById(Integer departmentId) {
-        LOGGER.debug("findById({})", departmentId);
-        return departmentDao.findById(departmentId)
+    public Department findById(final Integer id) {
+        LOGGER.debug("findById({})", id);
+        return departmentDao.findById(id)
                 .orElseThrow(() -> new RuntimeException("Failed to get department from DB"));
     }
 
     @Override
-    public Department addDepartment(Department department) {
+    public Department create(Department department) {
         LOGGER.debug("create({})", department);
         department.setDepartmentId(departmentDao.create(department));
         return department;
     }
 
     @Override
-    public void updateDepartment(Department department) {
+    public void update(Department department) {
         LOGGER.debug("update({})", department);
         departmentDao.update(department);
     }
@@ -52,19 +52,19 @@ public class DepartmentServiceImpl implements DepartmentService {
    }
 
     @Override
-    public Stream<Department> getDepartments() {
+    public Stream<Department> findAll() {
         LOGGER.debug("findAll()");
         return departmentDao.findAll();
     }
 
     @Override
-    public Stream<DepartmentDTO> getDepartmentDTOs() {
+    public Stream<DepartmentDTO> findAllDepartmentDTOs() {
         LOGGER.debug("findAllDepartmentDTOs()");
         return departmentDao.findAllDepartmentDTOs();
     }
 
     @Override
-    public void deleteDepartmentById(Integer id) {
+    public void delete(final Integer id) {
         LOGGER.debug("delete({})", id);
         departmentDao.delete(id);
    }

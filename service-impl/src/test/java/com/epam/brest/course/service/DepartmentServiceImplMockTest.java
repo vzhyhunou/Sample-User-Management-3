@@ -35,6 +35,7 @@ public class DepartmentServiceImplMockTest {
         EasyMock.expectLastCall();
         EasyMock.replay(mockDepartmentDao);
 
+        //FIXME replace deprecated method with update or patch
         departmentService.updateDepartmentDescription(ID, DESC);
 
         Assert.assertEquals(DESC, DEPARTMENT.getDescription());
