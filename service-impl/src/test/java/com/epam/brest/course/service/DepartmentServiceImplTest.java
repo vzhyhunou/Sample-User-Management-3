@@ -23,9 +23,10 @@ public class DepartmentServiceImplTest {
     @Test
     public void updateDepartmentDescription() {
 
+        //FIXME replace deprecated method with update or patch
         departmentService.updateDepartmentDescription(ID, DESC);
 
-        Department department = departmentService.getDepartmentById(ID);
+        Department department = departmentService.findById(ID);
         assertEquals(DESC, department.getDescription());
     }
 }

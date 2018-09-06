@@ -14,58 +14,58 @@ public class DepartmentServiceImpl implements DepartmentService {
 
     private static final Logger LOGGER = LogManager.getLogger();
 
-    private DepartmentDao departmentDao;
+    private final DepartmentDao departmentDao;
 
-    public DepartmentServiceImpl(DepartmentDao departmentDao) {
+    public DepartmentServiceImpl(final DepartmentDao departmentDao) {
         this.departmentDao = departmentDao;
     }
 
     @Override
-    public Department getDepartmentById(Integer departmentId) {
-        LOGGER.debug("getDepartmentById({})", departmentId);
-        return departmentDao.getDepartmentById(departmentId)
+    public Department findById(final Integer id) {
+        LOGGER.debug("findById({})", id);
+        return departmentDao.findById(id)
                 .orElseThrow(() -> new RuntimeException("Failed to get department from DB"));
     }
 
     @Override
-    public Department addDepartment(Department department) {
-        LOGGER.debug("addDepartment({})", department);
-        department.setDepartmentId(departmentDao.addDepartment(department));
+    public Department create(Department department) {
+        LOGGER.debug("create({})", department);
+        department.setDepartmentId(departmentDao.create(department));
         return department;
     }
 
     @Override
-    public void updateDepartment(Department department) {
-        LOGGER.debug("updateDepartment({})", department);
-        departmentDao.updateDepartment(department);
+    public void update(Department department) {
+        LOGGER.debug("update({})", department);
+        departmentDao.update(department);
     }
 
     @Override
     public void updateDepartmentDescription(Integer departmentId, String description) {
         LOGGER.debug("updateDepartmentDescription({}, {})", departmentId, description);
-        departmentDao.getDepartmentById(departmentId)
+        departmentDao.findById(departmentId)
                 .map(d -> {
                     d.setDescription(description);
                     return d;
                 })
-                .ifPresent(departmentDao::updateDepartment);
+                .ifPresent(departmentDao::update);
    }
 
     @Override
-    public Stream<Department> getDepartments() {
-        LOGGER.debug("getDepartments()");
-        return departmentDao.getDepartments();
+    public Stream<Department> findAll() {
+        LOGGER.debug("findAll()");
+        return departmentDao.findAll();
     }
 
     @Override
-    public Stream<DepartmentDTO> getDepartmentDTOs() {
-        LOGGER.debug("getDepartmentDTOs()");
-        return departmentDao.getDepartmentDTOs();
+    public Stream<DepartmentDTO> findAllDepartmentDTOs() {
+        LOGGER.debug("findAllDepartmentDTOs()");
+        return departmentDao.findAllDepartmentDTOs();
     }
 
     @Override
-    public void deleteDepartmentById(Integer id) {
-        LOGGER.debug("deleteDepartmentById({})", id);
-        departmentDao.deleteDepartmentById(id);
+    public void delete(final Integer id) {
+        LOGGER.debug("delete({})", id);
+        departmentDao.delete(id);
    }
 }

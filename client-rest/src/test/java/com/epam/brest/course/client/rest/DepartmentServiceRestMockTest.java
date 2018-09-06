@@ -64,7 +64,7 @@ public class DepartmentServiceRestMockTest {
         expect(mockRestTemplate.exchange(anyString(), anyObject(), anyObject(), anyObject(ParameterizedTypeReference.class))).andReturn(entity);
         replay(mockRestTemplate);
 
-        Collection<DepartmentDTO> results = departmentService.getDepartmentDTOs()
+        Collection<DepartmentDTO> results = departmentService.findAllDepartmentDTOs()
                 .collect(Collectors.toList());
 
         assertNotNull(results);
@@ -77,7 +77,7 @@ public class DepartmentServiceRestMockTest {
         expect(mockRestTemplate.getForEntity(anyString(), anyObject())).andReturn(entity);
         replay(mockRestTemplate);
 
-        Department result = departmentService.getDepartmentById(3);
+        Department result = departmentService.findById(3);
 
         assertNotNull(result);
         assertEquals("name", result.getDepartmentName());
@@ -89,7 +89,7 @@ public class DepartmentServiceRestMockTest {
         expect(mockRestTemplate.postForEntity(anyString(), anyObject(), anyObject())).andReturn(entity);
         replay(mockRestTemplate);
 
-        Department result = departmentService.addDepartment(department);
+        Department result = departmentService.create(department);
 
         assertNotNull(result);
         assertEquals(3, result.getDepartmentId().intValue());

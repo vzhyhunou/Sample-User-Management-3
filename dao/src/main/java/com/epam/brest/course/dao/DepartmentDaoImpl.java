@@ -50,41 +50,41 @@ public class DepartmentDaoImpl implements DepartmentDao {
     @Value("${department.delete}")
     private String deleteSql;
 
-    private NamedParameterJdbcTemplate namedParameterJdbcTemplate;
+    private final NamedParameterJdbcTemplate namedParameterJdbcTemplate;
 
-    public DepartmentDaoImpl(NamedParameterJdbcTemplate namedParameterJdbcTemplate) {
+    public DepartmentDaoImpl(final NamedParameterJdbcTemplate namedParameterJdbcTemplate) {
         this.namedParameterJdbcTemplate = namedParameterJdbcTemplate;
     }
 
     @Override
-    public Stream<Department> getDepartments() {
-        LOGGER.debug("getDepartments()");
+    public Stream<Department> findAll() {
+        LOGGER.debug("findAll()");
         List<Department> departments =
                 namedParameterJdbcTemplate.query(selectSql, new DepartmentRowMapper());
         return departments.stream();
     }
 
     @Override
-    public Stream<DepartmentDTO> getDepartmentDTOs() {
-        LOGGER.debug("getDepartmentDTOs()");
+    public Stream<DepartmentDTO> findAllDepartmentDTOs() {
+        LOGGER.debug("findAllDepartmentDTOs()");
         List<DepartmentDTO> list =
                 namedParameterJdbcTemplate.query(selectAvgSalarySql, new DepartmentDTORowMapper());
         return list.stream();
     }
 
     @Override
-    public Optional<Department> getDepartmentById(Integer departmentId) {
-        LOGGER.debug("getDepartmentById({})", departmentId);
+    public Optional<Department> findById(final Integer id) {
+        LOGGER.debug("findById({})", id);
         SqlParameterSource namedParameters =
-                new MapSqlParameterSource(DEPARTMENT_ID, departmentId);
+                new MapSqlParameterSource(DEPARTMENT_ID, id);
         Department department = namedParameterJdbcTemplate.queryForObject(selectByIdSql, namedParameters,
                 BeanPropertyRowMapper.newInstance(Department.class));
         return Optional.ofNullable(department);
     }
 
     @Override
-    public int addDepartment(Department department) {
-        LOGGER.debug("addDepartment({})", department);
+    public int create(final Department department) {
+        LOGGER.debug("create({})", department);
         return Optional.of(department)
                 .filter(this::isNameUnique)
                 .map(this::insertDepartment)
@@ -110,15 +110,15 @@ public class DepartmentDaoImpl implements DepartmentDao {
     }
 
     @Override
-    public void updateDepartment(Department department) {
+    public void update(final Department department) {
         Optional.of(namedParameterJdbcTemplate.update(updateSql, new BeanPropertySqlParameterSource(department)))
                 .filter(this::successfullyUpdated)
                 .orElseThrow(() -> new RuntimeException("Failed to update department in DB"));
     }
 
     @Override
-    public void deleteDepartmentById(Integer departmentId) {
-        Optional.of(namedParameterJdbcTemplate.getJdbcOperations().update(deleteSql, departmentId))
+    public void delete(final Integer id) {
+        Optional.of(namedParameterJdbcTemplate.getJdbcOperations().update(deleteSql, id))
                 .filter(this::successfullyUpdated)
                 .orElseThrow(() -> new RuntimeException("Failed to delete department from DB"));
     }

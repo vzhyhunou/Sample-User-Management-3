@@ -76,7 +76,7 @@ public class DemoApp {
 
     private void getAllDepartments() {
         System.out.println("departments: ");
-        departmentService.getDepartmentDTOs()
+        departmentService.findAllDepartmentDTOs()
                 .forEach(System.out::println);
     }
 
@@ -84,7 +84,7 @@ public class DemoApp {
         System.out.print("    Enter department id: ");
         int id;
         if (sc.hasNextInt() && (id = sc.nextInt()) > 0) {
-            Department department = departmentService.getDepartmentById(id);
+            Department department = departmentService.findById(id);
             System.out.println("department: " + department);
         } else {
             System.out.println("Bad value: " + sc.next());
@@ -99,7 +99,7 @@ public class DemoApp {
         String desc = sc.next();
 
         Department department = new Department(name, desc);
-        department = departmentService.addDepartment(department);
+        department = departmentService.create(department);
         System.out.println("department: " + department);
     }
 }
