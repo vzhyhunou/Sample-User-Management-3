@@ -40,7 +40,7 @@ public class DepartmentRestController {
     @PostMapping(value = "/departments")
     @ResponseStatus(HttpStatus.CREATED)
     Department addDepartment(@RequestBody Department department) {
-        LOGGER.debug("addDepartment({})", department);
+        LOGGER.debug("create({})", department);
         return departmentService.addDepartment(department);
     }
 
@@ -54,7 +54,7 @@ public class DepartmentRestController {
 
     @PutMapping(value = "/departments")
     void updateDepartment(@RequestBody Department department){
-        LOGGER.debug("updateDepartment({})", department);
+        LOGGER.debug("update({})", department);
         departmentService.updateDepartment(department);
     }
 
