@@ -60,7 +60,7 @@ public class DepartmentControllerMockTest {
 
     @Test
     public void getDepartments() throws Exception {
-        expect(departmentService.getDepartmentDTOs())
+        expect(departmentService.findAllDepartmentDTOs())
                 .andReturn(Arrays.asList(departmentDTO1, departmentDTO2).stream());
         replay(departmentService);
 

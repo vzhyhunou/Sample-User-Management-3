@@ -25,7 +25,7 @@ public class DepartmentRestController {
     @GetMapping(value = "/departments")
     Collection<DepartmentDTO> departments() {
         LOGGER.debug("departments()");
-        return departmentService.getDepartmentDTOs().collect(Collectors.toList());
+        return departmentService.findAllDepartmentDTOs().collect(Collectors.toList());
     }
 
     //curl -v localhost:8088/departments/1
@@ -33,15 +33,15 @@ public class DepartmentRestController {
     @ResponseStatus(HttpStatus.FOUND)
     Department departmentById(@PathVariable(value = "id") Integer id) {
         LOGGER.debug("departmentById({})", id);
-        return departmentService.getDepartmentById(id);
+        return departmentService.findById(id);
     }
 
     //curl -H "Content-Type: application/json" -X POST -d '{"departmentName":"xyz","description":"xyz"}' -v localhost:8088/departments
     @PostMapping(value = "/departments")
     @ResponseStatus(HttpStatus.CREATED)
     Department addDepartment(@RequestBody Department department) {
-        LOGGER.debug("addDepartment({})", department);
-        return departmentService.addDepartment(department);
+        LOGGER.debug("create({})", department);
+        return departmentService.create(department);
     }
 
     //curl -X "DELETE" localhost:8088/departments/1
@@ -49,19 +49,19 @@ public class DepartmentRestController {
     @ResponseStatus(HttpStatus.FOUND)
     void deleteDepartment(@PathVariable(value = "id") Integer id) {
         LOGGER.debug("deleteDepartment({})", id);
-        departmentService.deleteDepartmentById(id);
+        departmentService.delete(id);
     }
 
     @PutMapping(value = "/departments")
     void updateDepartment(@RequestBody Department department){
-        LOGGER.debug("updateDepartment({})", department);
-        departmentService.updateDepartment(department);
+        LOGGER.debug("update({})", department);
+        departmentService.update(department);
     }
 
     @GetMapping(value = "/departments/names")
     String departmentNames() {
         LOGGER.debug("department names");
-        return departmentService.getDepartmentDTOs()
+        return departmentService.findAllDepartmentDTOs()
                 .map(DepartmentDTO::getDepartmentName)
                 .collect(Collectors.joining("|"));
     }
@@ -69,7 +69,7 @@ public class DepartmentRestController {
     @GetMapping(value = "/departments/paid")
     Collection<DepartmentDTO> departmentsPaid() {
         LOGGER.debug("departments paid");
-        return departmentService.getDepartmentDTOs()
+        return departmentService.findAllDepartmentDTOs()
                 .filter(d -> d.getAvgSalary() > 0)
                 .collect(Collectors.toList());
     }
