@@ -3,18 +3,19 @@ package com.epam.brest.course.service;
 import com.epam.brest.course.dao.DepartmentDao;
 import com.epam.brest.course.model.Department;
 import org.easymock.EasyMock;
-import org.junit.Assert;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
-import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
+import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 import java.util.Optional;
 
 import static org.easymock.EasyMock.anyObject;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
-@RunWith(SpringJUnit4ClassRunner.class)
+
+@ExtendWith(SpringExtension.class)
 @ContextConfiguration(locations = {"classpath:service-mock-test.xml"})
 public class DepartmentServiceImplMockTest {
 
@@ -37,6 +38,6 @@ public class DepartmentServiceImplMockTest {
 
         departmentService.updateDepartmentDescription(ID, DESC);
 
-        Assert.assertEquals(DESC, DEPARTMENT.getDescription());
+        assertEquals(DESC, DEPARTMENT.getDescription());
     }
 }

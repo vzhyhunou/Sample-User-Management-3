@@ -2,15 +2,15 @@ package com.epam.brest.course.rest;
 
 import com.epam.brest.course.dto.DepartmentDTO;
 import com.epam.brest.course.service.DepartmentService;
-import org.junit.After;
-import org.junit.Before;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
 import org.springframework.test.context.ContextConfiguration;
-import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
+import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 
@@ -24,7 +24,8 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-@RunWith(SpringJUnit4ClassRunner.class)
+
+@ExtendWith(SpringExtension.class)
 @ContextConfiguration(locations = {"classpath:rest-spring-test.xml"})
 public class DepartmentControllerMockTest {
 
@@ -39,7 +40,7 @@ public class DepartmentControllerMockTest {
     @Autowired
     private DepartmentService departmentService;
 
-    @Before
+    @BeforeEach
     public void setUp() {
         departmentDTO1 = new DepartmentDTO();
         departmentDTO1.setDepartmentId(1);
@@ -52,7 +53,7 @@ public class DepartmentControllerMockTest {
                 .build();
     }
 
-    @After
+    @AfterEach
     public void tearDown() {
         verify(departmentService);
         reset(departmentService);

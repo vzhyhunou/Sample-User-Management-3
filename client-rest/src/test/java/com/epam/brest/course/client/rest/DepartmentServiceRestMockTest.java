@@ -3,18 +3,16 @@ package com.epam.brest.course.client.rest;
 import com.epam.brest.course.dto.DepartmentDTO;
 import com.epam.brest.course.model.Department;
 import com.epam.brest.course.service.DepartmentService;
-import org.junit.After;
-import org.junit.Assert;
-import org.junit.Before;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.ParameterizedTypeReference;
-import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.test.context.ContextConfiguration;
-import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
+import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.web.client.RestTemplate;
 
 import java.util.Arrays;
@@ -23,8 +21,11 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 import static org.easymock.EasyMock.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 
-@RunWith(SpringJUnit4ClassRunner.class)
+
+@ExtendWith(SpringExtension.class)
 @ContextConfiguration(locations = "classpath:spring-context-test.xml")
 public class DepartmentServiceRestMockTest {
 
@@ -38,7 +39,7 @@ public class DepartmentServiceRestMockTest {
     @Autowired
     private RestTemplate mockRestTemplate;
 
-    @Before
+    @BeforeEach
     public void init() {
         departmentDTO1 = new DepartmentDTO();
         departmentDTO1.setDepartmentId(1);
@@ -50,7 +51,7 @@ public class DepartmentServiceRestMockTest {
         department.setDepartmentId(3);
     }
 
-    @After
+    @AfterEach
     public void tearDown() {
         verify(mockRestTemplate);
         reset(mockRestTemplate);
@@ -66,8 +67,8 @@ public class DepartmentServiceRestMockTest {
         Collection<DepartmentDTO> results = departmentService.getDepartmentDTOs()
                 .collect(Collectors.toList());
 
-        Assert.assertNotNull(results);
-        Assert.assertEquals(2, results.size());
+        assertNotNull(results);
+        assertEquals(2, results.size());
     }
 
     @Test
@@ -78,8 +79,8 @@ public class DepartmentServiceRestMockTest {
 
         Department result = departmentService.getDepartmentById(3);
 
-        Assert.assertNotNull(result);
-        Assert.assertEquals("name", result.getDepartmentName());
+        assertNotNull(result);
+        assertEquals("name", result.getDepartmentName());
     }
 
     @Test
@@ -90,7 +91,7 @@ public class DepartmentServiceRestMockTest {
 
         Department result = departmentService.addDepartment(department);
 
-        Assert.assertNotNull(result);
-        Assert.assertEquals(3, result.getDepartmentId().intValue());
+        assertNotNull(result);
+        assertEquals(3, result.getDepartmentId().intValue());
     }
 }
