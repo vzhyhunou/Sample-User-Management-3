@@ -24,8 +24,8 @@
     </bean>
 
     <jdbc:initialize-database>
-        <jdbc:script location="classpath:create-tables.sql"/>
-        <jdbc:script location="classpath:data-script.sql"/>
+        <jdbc:script location="classpath:sample_db/create-tables.sql"/>
+        <jdbc:script location="classpath:sample_db/data-script.sql"/>
     </jdbc:initialize-database>
 
     <bean id="transactionManager" class="org.springframework.jdbc.datasource.DataSourceTransactionManager">

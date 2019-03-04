@@ -2,16 +2,20 @@ package com.epam.brest.course.service;
 
 import com.epam.brest.course.dao.DepartmentDao;
 import com.epam.brest.course.model.Department;
-import org.easymock.Capture;
 import org.easymock.EasyMock;
-import org.junit.Assert;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
-import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
+import org.springframework.test.context.junit.jupiter.SpringExtension;
 
-@RunWith(SpringJUnit4ClassRunner.class)
+import java.util.Optional;
+
+import static org.easymock.EasyMock.anyObject;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+
+
+@ExtendWith(SpringExtension.class)
 @ContextConfiguration(locations = {"classpath:service-mock-test.xml"})
 public class DepartmentServiceImplMockTest {
 
@@ -27,15 +31,14 @@ public class DepartmentServiceImplMockTest {
 
     @Test
     public void updateDepartmentDescription() {
-        EasyMock.expect(mockDepartmentDao.getDepartmentById(EasyMock.anyInt())).andReturn(DEPARTMENT);
-        Capture<Department> captureArgument = Capture.newInstance();
-        mockDepartmentDao.updateDepartment(EasyMock.capture(captureArgument));
+        EasyMock.expect(mockDepartmentDao.findById(EasyMock.anyInt())).andReturn(Optional.of(DEPARTMENT));
+        mockDepartmentDao.update(anyObject());
         EasyMock.expectLastCall();
         EasyMock.replay(mockDepartmentDao);
 
+        //FIXME replace deprecated method with update or patch
         departmentService.updateDepartmentDescription(ID, DESC);
 
-        Department department = captureArgument.getValue();
-        Assert.assertEquals(DESC, department.getDescription());
+        assertEquals(DESC, DEPARTMENT.getDescription());
     }
 }

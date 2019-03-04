@@ -1,7 +1,10 @@
 package com.epam.brest.course.model;
 
-import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+
 
 public class EmployeeTest {
 
@@ -12,7 +15,7 @@ public class EmployeeTest {
 
         Employee employee = new Employee();
         employee.setEmployeeName(VASIA);
-        Assert.assertTrue(employee.getEmployeeName().equals(VASIA));
-        Assert.assertEquals(VASIA, employee.getEmployeeName());
+        assertTrue(employee.getEmployeeName().equals(VASIA));
+        assertEquals(VASIA, employee.getEmployeeName());
     }
 }

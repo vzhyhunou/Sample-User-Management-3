@@ -1,6 +1,5 @@
 package com.epam.brest.course.web_app.controllers;
 
-import com.epam.brest.course.dto.DepartmentDTO;
 import com.epam.brest.course.model.Department;
 import com.epam.brest.course.service.DepartmentService;
 import org.apache.logging.log4j.LogManager;
@@ -14,7 +13,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 
 import javax.validation.Valid;
-import java.util.Collection;
+import java.util.stream.Collectors;
 
 /**
  * Department controller.
@@ -34,9 +33,9 @@ public class DepartmentController {
      */
     @GetMapping(value = "/departments")
     public final String departments(Model model) {
-        LOGGER.debug("getDepartments({})", model);
-        Collection<DepartmentDTO> departments = departmentService.getDepartmentDTOs();
-        model.addAttribute("departments", departments);
+        LOGGER.debug("findAll({})", model);
+        model.addAttribute("departments", departmentService.findAllDepartmentDTOs()
+                .collect(Collectors.toList()));
         return "departments";
     }
 
@@ -47,7 +46,7 @@ public class DepartmentController {
      */
     @GetMapping(value = "/department")
     public final String gotoAddDepartmentPage(Model model) {
-        LOGGER.debug("addDepartment({})", model);
+        LOGGER.debug("create({})", model);
         Department department = new Department();
         model.addAttribute("isNew", true);
         model.addAttribute("department", department);
@@ -65,11 +64,11 @@ public class DepartmentController {
     public String addDepartment(@Valid Department department,
                                 BindingResult result
     ) {
-        LOGGER.debug("addDepartment({}, {})", department, result);
+        LOGGER.debug("create({}, {})", department, result);
         if (result.hasErrors()) {
             return "department";
         } else {
-            this.departmentService.addDepartment(department);
+            this.departmentService.create(department);
             return "redirect:/departments";
         }
     }
@@ -82,7 +81,7 @@ public class DepartmentController {
     @GetMapping(value = "/department/{id}")
     public final String gotoEditDepartmentPage(@PathVariable Integer id, Model model) {
         LOGGER.debug("gotoEditDepartmentPage({},{})", id, model);
-        Department department = departmentService.getDepartmentById(id);
+        Department department = departmentService.findById(id);
         model.addAttribute("isNew", false);
         model.addAttribute("department", department);
         return "department";
@@ -97,11 +96,11 @@ public class DepartmentController {
     public String updateDepartment(@Valid Department department,
                                    BindingResult result
     ) {
-        LOGGER.debug("updateDepartment({}, {})", department, result);
+        LOGGER.debug("update({}, {})", department, result);
         if (result.hasErrors()) {
             return "department";
         } else {
-            this.departmentService.updateDepartment(department);
+            this.departmentService.update(department);
             return "redirect:/departments";
         }
     }
@@ -113,8 +112,8 @@ public class DepartmentController {
      */
     @GetMapping(value = "/department/{id}/delete")
     public final String deleteDepartmentById(@PathVariable Integer id, Model model) {
-        LOGGER.debug("deleteDepartmentById({},{})", id, model);
-        departmentService.deleteDepartmentById(id);
+        LOGGER.debug("delete({},{})", id, model);
+        departmentService.delete(id);
         return "redirect:/departments";
     }
 }

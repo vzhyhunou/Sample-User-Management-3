@@ -3,11 +3,13 @@ package com.epam.brest.course.client.rest;
 import com.epam.brest.course.dto.DepartmentDTO;
 import com.epam.brest.course.model.Department;
 import com.epam.brest.course.service.DepartmentService;
+import org.springframework.core.ParameterizedTypeReference;
+import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.client.RestTemplate;
 
-import java.util.Collection;
 import java.util.List;
+import java.util.stream.Stream;
 
 public class DepartmentConsumerRest implements DepartmentService {
 
@@ -21,44 +23,45 @@ public class DepartmentConsumerRest implements DepartmentService {
     }
 
     @Override
-    public Department getDepartmentById(Integer departmentId) {
-        ResponseEntity<Department> responseEntity = restTemplate.getForEntity(url + "/" + departmentId, Department.class);
-        Department department = responseEntity.getBody();
+    public Department findById(final Integer id) {
+        ResponseEntity<Department> responseEntity = restTemplate.getForEntity(url + "/" + id, Department.class);
+        final Department department = responseEntity.getBody();
         return department;
     }
 
     @Override
-    public Department addDepartment(Department department) {
+    public Department create(Department department) {
         ResponseEntity<Department> responseEntity = restTemplate.postForEntity(url, department, Department.class);
-        Department result = responseEntity.getBody();
+        final Department result = responseEntity.getBody();
         return result;
     }
 
     @Override
-    public void updateDepartment(Department department) {
-
+    public void update(final Department department) {
+        restTemplate.put(url, department);
     }
 
     @Override
+    @Deprecated
     public void updateDepartmentDescription(Integer departmentId, String description) {
-
+        //FIXME remove deprecated
     }
 
     @Override
-    public Collection<Department> getDepartments() {
+    public Stream<Department> findAll() {
+        //FIXME implement
         return null;
     }
 
     @Override
-    @SuppressWarnings("unchecked")
-    public Collection<DepartmentDTO> getDepartmentDTOs() {
-        ResponseEntity responseEntity = restTemplate.getForEntity(url, List.class);
-        List<DepartmentDTO> departments = (List<DepartmentDTO>)responseEntity.getBody();
-        return departments;
+    public Stream<DepartmentDTO> findAllDepartmentDTOs() {
+        ResponseEntity<List<DepartmentDTO>> responseEntity =
+                restTemplate.exchange(url, HttpMethod.GET, null, new ParameterizedTypeReference<List<DepartmentDTO>>() {});
+        return responseEntity.getBody().stream();
     }
 
     @Override
-    public void deleteDepartmentById(Integer id) {
-
+    public void delete(Integer id) {
+        restTemplate.delete(url + "/" + id);
     }
 }

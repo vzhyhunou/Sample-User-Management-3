@@ -1,14 +1,16 @@
 package com.epam.brest.course.service;
 
 import com.epam.brest.course.model.Department;
-import org.junit.Assert;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
-import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
+import org.springframework.test.context.junit.jupiter.SpringExtension;
 
-@RunWith(SpringJUnit4ClassRunner.class)
+import static org.junit.jupiter.api.Assertions.assertEquals;
+
+
+@ExtendWith(SpringExtension.class)
 @ContextConfiguration(locations = {"classpath:service-test.xml", "classpath:test-db-spring.xml", "classpath:dao.xml"})
 public class DepartmentServiceImplTest {
 
@@ -21,9 +23,10 @@ public class DepartmentServiceImplTest {
     @Test
     public void updateDepartmentDescription() {
 
+        //FIXME replace deprecated method with update or patch
         departmentService.updateDepartmentDescription(ID, DESC);
 
-        Department department = departmentService.getDepartmentById(ID);
-        Assert.assertEquals(DESC, department.getDescription());
+        Department department = departmentService.findById(ID);
+        assertEquals(DESC, department.getDescription());
     }
 }

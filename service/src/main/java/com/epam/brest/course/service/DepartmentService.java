@@ -2,9 +2,8 @@ package com.epam.brest.course.service;
 
 import com.epam.brest.course.dto.DepartmentDTO;
 import com.epam.brest.course.model.Department;
-import org.springframework.dao.DataAccessException;
 
-import java.util.Collection;
+import java.util.stream.Stream;
 
 /**
  * Department Service Interface.
@@ -14,26 +13,28 @@ public interface DepartmentService {
     /**
      * Get Department By Id.
      *
-     * @param departmentId id
+     * @param id id
      * @return Department
-     * @throws DataAccessException on data access error.
      */
-    Department getDepartmentById(Integer departmentId);
+    Department findById(final Integer id);
 
     /**
      * Persist new department.
      *
      * @param department new department
      * @return department with id.
+     *
+     * FIXME we dont need full object, check clients for usage with generated id only
      */
-    Department addDepartment(Department department);
+    @Deprecated
+    Department create(final Department department);
 
     /**
      * Update department.
      *
      * @param department department
      */
-    void updateDepartment(Department department);
+    void update(Department department);
 
     /**
      * Update department description.
@@ -45,24 +46,23 @@ public interface DepartmentService {
     void updateDepartmentDescription(Integer departmentId, String description);
 
     /**
-     * Get departments list.
+     * Find all departments stream.
      *
-     * @return departments list.
-     * @throws DataAccessException on data access error.
+     * @return departments .
      */
-    Collection<Department> getDepartments();
+    Stream<Department> findAll();
 
     /**
      * Get department DTOs list.
      *
      * @return department DTOs list.
      */
-    Collection<DepartmentDTO> getDepartmentDTOs();
+    Stream<DepartmentDTO> findAllDepartmentDTOs();
 
     /**
-     * Delete department.
+     * Delete department with specified id.
      *
      * @param id department id
      */
-    void deleteDepartmentById(Integer id);
+    void delete(final Integer id);
 }

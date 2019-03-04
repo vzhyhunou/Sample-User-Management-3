@@ -1,11 +1,9 @@
 package com.epam.brest.course.client;
 
-import com.epam.brest.course.dto.DepartmentDTO;
 import com.epam.brest.course.model.Department;
 import com.epam.brest.course.service.DepartmentService;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 
-import java.util.Collection;
 import java.util.Scanner;
 
 /**
@@ -77,15 +75,16 @@ public class DemoApp {
     }
 
     private void getAllDepartments() {
-        Collection<DepartmentDTO> departments = departmentService.getDepartmentDTOs();
-        System.out.println("departments: " + departments);
+        System.out.println("departments: ");
+        departmentService.findAllDepartmentDTOs()
+                .forEach(System.out::println);
     }
 
     private void getDepartmentById() {
         System.out.print("    Enter department id: ");
         int id;
         if (sc.hasNextInt() && (id = sc.nextInt()) > 0) {
-            Department department = departmentService.getDepartmentById(id);
+            Department department = departmentService.findById(id);
             System.out.println("department: " + department);
         } else {
             System.out.println("Bad value: " + sc.next());
@@ -100,7 +99,7 @@ public class DemoApp {
         String desc = sc.next();
 
         Department department = new Department(name, desc);
-        department = departmentService.addDepartment(department);
+        department = departmentService.create(department);
         System.out.println("department: " + department);
     }
 }
